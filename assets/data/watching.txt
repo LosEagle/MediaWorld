@@ -1,0 +1,46 @@
+# JACK EHM EP 19
+Survivor.24.1.2011-12-18
+The League.7.12.2015-12-02
+Boardwalk Empire.5.5.2014-09-28
+The Simpsons.28.6.2016-09-25
+The 100.2.7.2014-12-10
+Top Gear.2.8.2003-06-15
+iZombie.2.10.2016-01-12
+Black Sails.4.1.ERROR
+House Of Cards (US).5.1.None
+# The Tudors.3.5.2009-05-03 52:24
+TURN.2.5.2015-05-04
+Game of Thrones.7.1.ERROR
+Fear The Walking Dead.3.1.2016-10-02
+Mr Robot.3.1.ERROR
+Orange Is The New Black.5.1.ERROR
+Z Nation.3.12.2016-09-30
+Bob's Burgers.7.8.2016-09-25
+Silicon Valley.4.1.ERROR
+Suits.5.2.2015-07-01
+How I Met Your Mother.9.19.2014-03-03
+Outlander.1.14.2015-05-09
+South Park.21.1.2016-09-2
+Stargate Universe.2.1.2010-09-28
+Star Wars.2.9.2015-12-09
+Better Call Saul.3.1.ERROR
+The Musketeers.3.2.2016-06-11
+Vikings.4.17.ERROR
+The Americans.5.1.ERROR
+The Walking Dead.7.9.2016-10-23
+Gotham.3.12.2016-10-03
+The Last Kingdom.2.1.ERROR
+Daredevil.3.1.ERROR
+Jessica Jones.2.1.ERROR
+Peaky Blinders.4.1.ERROR
+Freemans Mind.1.56.2014-04-25
+Homeland.6.1.2017-01-15
+The X-Files.11.1.2016-02-22
+F Is For Family.2.1.ERROR
+The Boondocks.2.1.2007-10-08
+Fargo.3.1.ERROR
+# The Ultimate Fighter.23.01.2016-04-27 0:30:19
+Archer.1.2.1975-02-06
+Westworld.1.7.aa
+Narcos.3.1.fsad
+The Grand Tour.1.4.asdfas
