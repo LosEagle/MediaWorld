@@ -28,7 +28,7 @@ module.exports = {
                 loaders: ["style-loader", "css-loader", "sass-loader?indentedSyntax"]
             },
             {
-                test: /\.css$/, 
+                test: /\.css$/,
                 loader: "style-loader!css-loader"
             },
             {

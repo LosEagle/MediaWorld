@@ -1,11 +1,12 @@
 {
-  "name": "MediaWorld",
+  "name": "mediaworld",
   "version": "1.0.0",
   "description": "MediaWorld",
   "main": "main.js",
   "scripts": {
     "dev": "./node_modules/.bin/webpack-dev-server --hot",
-    "start": "electron ."
+    "webpack": "./node_modules/.bin/webpack --watch",
+    "electron": "electron ."
   },
   "repository": "https://gitlab.com/nosek/MediaWorld",
   "keywords": [
@@ -26,6 +27,7 @@
     "electron": "^1.4.1",
     "file-loader": "^0.9.0",
     "hammerjs": "^2.0.8",
+    "lodash": "^4.17.4",
     "materialize-css": "^0.97.8",
     "node-sass": "^4.3.0",
     "react": "^15.4.1",

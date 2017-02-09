@@ -1,6 +1,6 @@
 import React from "react";
 
-require("../../css/2-components/Upcoming.scss");
+require("../../css/2-components/upcoming.scss");
 
 var fs = window.require("fs");
 
