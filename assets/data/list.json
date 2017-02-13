@@ -1,22 +1,17 @@
 [
     {
-        "name": "testtt",
-        "s": "1",
-        "e": "1"
+        "name": "Arrow",
+        "season": "1",
+        "episode": "1"
     },
     {
-        "name": "testststs",
-        "s": "1",
-        "e": "1"
+        "name": "Arrow",
+        "season": "2",
+        "episode": "1"
     },
     {
-        "name": "example",
-        "s": "15",
-        "e": "13"
-    },
-    {
-        "name": "examples",
-        "s": "15",
-        "e": "13"
+        "name": "Gotham",
+        "season": "1",
+        "episode": "1"
     }
 ]

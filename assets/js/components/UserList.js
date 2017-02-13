@@ -6,7 +6,7 @@ const _  = require("lodash");
 const UserList = React.createClass({
     getInitialState: function() {
         return {
-            jsonList: "initialState",
+            jsonList: "",
             listPath: "./assets/data/list.json"
         };
     },
@@ -24,12 +24,12 @@ const UserList = React.createClass({
                             <label htmlFor="name">Name</label>
                         </div>
                         <div className="input-field col s12">
-                            <input id="s" type="number" className="validate" ref="s"/>
-                            <label htmlFor="s">S</label>
+                            <input id="season" type="number" className="validate" ref="season"/>
+                            <label htmlFor="season">S</label>
                         </div>
                         <div className="input-field col s12">
-                            <input id="e" type="number" className="validate" ref="e"/>
-                            <label htmlFor="e">E</label>
+                            <input id="episode" type="number" className="validate" ref="episode"/>
+                            <label htmlFor="episode">E</label>
                         </div>
                         <div className="col s12">
                             <button className="btn waves-effect waves-light" type="submit" name="action">
@@ -44,20 +44,20 @@ const UserList = React.createClass({
 
     handleUserListForm: function(event) {
         let name = this.refs.name.value;
-        let s = this.refs.s.value;
-        let e = this.refs.e.value;
+        let season = this.refs.season.value;
+        let episode = this.refs.episode.value;
 
         event.preventDefault();
 
-        if (name === "" || s === "" || e === "") {
+        if (name === "" || season === "" || episode === "") {
             Materialize.toast("Please fill all form fields", 4000);
             return;
         }
 
         let finalJson = [{
             "name": name,
-            "s": s,
-            "e": e
+            "season": season,
+            "episode": episode
         }];
 
         this.checkListExistence();
@@ -72,19 +72,22 @@ const UserList = React.createClass({
     },
 
     listInput: function() {
-        let self = this;
         let data = fs.readFileSync(this.state.listPath, "utf8");
 
-        if (data === "") {
-            data = [{}];
+        if (data === "")
             this.state.jsonList = data;
-        } else {
+        else
             this.state.jsonList = JSON.parse(data);
-        }
     },
 
     listOutput: function(currentJson, formValues) {
-        let finalValue = _.concat(currentJson, formValues);
+        let finalValue;
+
+        if (currentJson !== "")
+            finalValue = _.concat(currentJson, formValues);
+        else
+            finalValue = formValues;
+
         finalValue = JSON.stringify(finalValue, null, 4);
 
         fs.writeFile(this.state.listPath, finalValue, (err) => {

@@ -5,17 +5,18 @@ import { Router, Route, Link, hashHistory } from "react-router";
 require("materialize-css");
 require("materialize-css/sass/materialize.scss");
 require("../css/main.sass");
+require("font-awesome/scss/font-awesome.scss");
 
-var Upcoming = require("./components/Upcoming");
-var UserList = require("./components/UserList");
+const Home = require("./components/Home");
+const UserList = require("./components/UserList");
 
 const app = document.getElementById("app");
 
-var AppRouter = React.createClass({
+const AppRouter = React.createClass({
     render: function() {
         return (
             <Router history={hashHistory}>
-                <Route path={"/"} component={Upcoming} />
+                <Route path={"/"} component={Home} />
                 <Route path={"/userlist"} component={UserList} />
             </Router>
         );
