@@ -54,12 +54,11 @@ const UserList = React.createClass({
             return;
         }
 
-        let finalJson = {
-            [name]: {
-                "s": s,
-                "e": e
-            }
-        };
+        let finalJson = [{
+            "name": name,
+            "s": s,
+            "e": e
+        }];
 
         this.checkListExistence();
         this.listInput();
@@ -77,7 +76,7 @@ const UserList = React.createClass({
         let data = fs.readFileSync(this.state.listPath, "utf8");
 
         if (data === "") {
-            data = {};
+            data = [{}];
             this.state.jsonList = data;
         } else {
             this.state.jsonList = JSON.parse(data);
@@ -85,7 +84,7 @@ const UserList = React.createClass({
     },
 
     listOutput: function(currentJson, formValues) {
-        let finalValue = _.assign(currentJson, formValues);
+        let finalValue = _.concat(currentJson, formValues);
         finalValue = JSON.stringify(finalValue, null, 4);
 
         fs.writeFile(this.state.listPath, finalValue, (err) => {
