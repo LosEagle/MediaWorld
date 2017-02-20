@@ -2,7 +2,7 @@ var path = require("path");
 var webpack = require("webpack");
 
 module.exports = {
-    entry: path.resolve(__dirname, "assets/js/App.js"),
+    entry: path.resolve(__dirname, "assets/js/app.js"),
 
     output: {
         path: path.resolve(__dirname, "build/"),
@@ -32,7 +32,7 @@ module.exports = {
                 loader: "style-loader!css-loader"
             },
             {
-                test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+                test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
                 loader : "file-loader"
             }
         ]

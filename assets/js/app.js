@@ -9,6 +9,7 @@ require("font-awesome/scss/font-awesome.scss");
 
 const Home = require("./components/Home");
 const UserList = require("./components/UserList");
+const UserListRemove = require("./components/UserListRemove");
 
 const app = document.getElementById("app");
 
@@ -18,6 +19,7 @@ const AppRouter = React.createClass({
             <Router history={hashHistory}>
                 <Route path={"/"} component={Home} />
                 <Route path={"/userlist"} component={UserList} />
+                <Route path={"/userlistremove"} component={UserListRemove} />
             </Router>
         );
     }

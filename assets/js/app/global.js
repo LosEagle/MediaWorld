@@ -1,0 +1,1 @@
+export const userItems = "./assets/data/list.json";
