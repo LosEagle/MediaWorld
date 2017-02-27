@@ -17,19 +17,19 @@ const UserList = React.createClass({
                 <form onSubmit={this.handleUserListForm} className="col s12">
                     <div className="row">
                         <div className="col s12">
-                            <h1>ListComponent</h1>
+                            <h1>Add show to watchlist</h1>
                         </div>
                         <div className="input-field col s12">
                             <input id="name" type="text" className="validate" ref="name"/>
-                            <label htmlFor="name">Name</label>
+                            <label htmlFor="name">Show name</label>
                         </div>
                         <div className="input-field col s12">
                             <input id="season" type="number" className="validate" ref="season"/>
-                            <label htmlFor="season">S</label>
+                            <label htmlFor="season">Season</label>
                         </div>
                         <div className="input-field col s12">
                             <input id="episode" type="number" className="validate" ref="episode"/>
-                            <label htmlFor="episode">E</label>
+                            <label htmlFor="episode">Episode</label>
                         </div>
                         <div className="col s12">
                             <button className="btn waves-effect waves-light" type="submit" name="action">
