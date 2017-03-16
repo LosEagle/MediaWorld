@@ -6,40 +6,36 @@ import IO from "../app/IO";
 
 const UserListRemove = React.createClass({
     render: function() {
-        let connection = [];
+        let collection = [];
 
-        connection = this.createCollectionArray();
+        collection = this.createCollectionArray();
 
         return (
             <div className="row">
-                {connection}
+                {collection}
             </div>
         );
     },
 
     createCollectionArray: function() {
-        let collectionArray = [];
-        let currentObject;
         const io = new IO;
 
-        let JSONList = io.readJSON(global.userItems);
+        let collection = io.readJSON(global.userItems);
 
-        for (let i = 0; i <= JSONList.length - 1; i++) {
-            currentObject = JSONList[i];
-
-            collectionArray.push(
+        collection = collection.map((item, i) => {
+            return (
                 <li key={i} className="collection-item">
-                    {currentObject.name} Season:{currentObject.season} Episode:{currentObject.episode}
+                    <strong>{item.name}</strong> Season:{item.season} Episode:{item.episode}
                     <a href="#" onClick={this.handleItemRemove} className="secondary-content">
                         <i data-entry={i} className="fa fa-times"></i>
                     </a>
                 </li>
             );
-        }
+        });
 
         return (
             <ul className="collection col s12">
-                {collectionArray}
+                {collection}
             </ul>
         );
     },
