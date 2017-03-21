@@ -42,7 +42,6 @@ const UserList = React.createClass({
         let name = this.refs.name.value;
         let season = this.refs.season.value;
         let episode = this.refs.episode.value;
-        let contents;
 
         event.preventDefault();
 
@@ -58,7 +57,6 @@ const UserList = React.createClass({
         }];
 
         io.createFileIfNotExists(global.userItems);
-        contents = io.readJSON(global.userItems);
         io.writeJSON(global.userItems, finalJson);
     }
 });
