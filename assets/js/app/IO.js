@@ -37,11 +37,11 @@ export default class IO {
     removeJSONEntry(path, entry) {
         entry = parseInt(entry);
         let currentJSON = this.readJSON(path);
-        
+
         currentJSON.splice(entry, 1);
-        
+
         currentJSON = JSON.stringify(currentJSON, null, 4);
-        
+
         fs.writeFile(path, currentJSON, (err) => {
             if (err)
                 throw err;
