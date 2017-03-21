@@ -11,9 +11,6 @@ const UserList = React.createClass({
             <div className="row">
                 <form onSubmit={this.handleUserListForm} className="col s12">
                     <div className="row">
-                        <div className="col s12">
-                            <h1>Add show to watchlist</h1>
-                        </div>
                         <div className="input-field col s12">
                             <input id="name" type="text" className="validate" ref="name"/>
                             <label htmlFor="name">Show name</label>
