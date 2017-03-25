@@ -11,8 +11,10 @@ const Home = require("./components/Home");
 const UserList = require("./components/UserList");
 const UserListRemove = require("./components/UserListRemove");
 const Calendar = require("./components/Calendar");
+const Navbar = require("./components/Navbar");
 
 const app = document.getElementById("app");
+const navbar = document.getElementById("navbar");
 
 const AppRouter = React.createClass({
     render: function() {
@@ -28,3 +30,4 @@ const AppRouter = React.createClass({
 });
 
 ReactDOM.render(<AppRouter />, app);
+ReactDOM.render(<Navbar />, navbar);
