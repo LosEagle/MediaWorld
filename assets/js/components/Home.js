@@ -4,11 +4,12 @@ require("../../css/2-components/home.scss");
 
 const fs = window.require("fs");
 const axios = require("axios");
+const global = require("../app/global.js");
 
 const Home = React.createClass({
     getInitialState: function() {
         return {
-            listPath: "./assets/data/list.json",
+            listPath: global.userItems,
             jsonList: "",
             omdbData: ""
         };

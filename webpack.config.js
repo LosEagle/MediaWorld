@@ -38,6 +38,8 @@ module.exports = {
         ]
     },
 
+    target: "electron-main",
+
     plugins: [
         new webpack.ProvidePlugin({
             $: "jquery",
