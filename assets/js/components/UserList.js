@@ -2,23 +2,15 @@ import React from "react";
 
 const fs = window.require("fs");
 const _  = require("lodash");
+const global = require("../app/global");
+import IO from "../app/IO";
 
 const UserList = React.createClass({
-    getInitialState: function() {
-        return {
-            jsonList: "",
-            listPath: "./assets/data/list.json"
-        };
-    },
-
     render: function() {
         return (
             <div className="row">
                 <form onSubmit={this.handleUserListForm} className="col s12">
                     <div className="row">
-                        <div className="col s12">
-                            <h1>Add show to watchlist</h1>
-                        </div>
                         <div className="input-field col s12">
                             <input id="name" type="text" className="validate" ref="name"/>
                             <label htmlFor="name">Show name</label>
@@ -43,6 +35,7 @@ const UserList = React.createClass({
     },
 
     handleUserListForm: function(event) {
+        let io = new IO;
         let name = this.refs.name.value;
         let season = this.refs.season.value;
         let episode = this.refs.episode.value;
@@ -60,40 +53,8 @@ const UserList = React.createClass({
             "episode": episode
         }];
 
-        this.checkListExistence();
-        this.listInput();
-        this.listOutput(this.state.jsonList, finalJson);
-    },
-
-    checkListExistence: function() {
-        if (!fs.existsSync(this.state.listPath)) {
-            fs.openSync(this.state.listPath, "w");
-        }
-    },
-
-    listInput: function() {
-        let data = fs.readFileSync(this.state.listPath, "utf8");
-
-        if (data === "")
-            this.state.jsonList = data;
-        else
-            this.state.jsonList = JSON.parse(data);
-    },
-
-    listOutput: function(currentJson, formValues) {
-        let finalValue;
-
-        if (currentJson !== "")
-            finalValue = _.concat(currentJson, formValues);
-        else
-            finalValue = formValues;
-
-        finalValue = JSON.stringify(finalValue, null, 4);
-
-        fs.writeFile(this.state.listPath, finalValue, (err) => {
-            if (err)
-                throw err;
-        });
+        io.createFileIfNotExists(global.userItems);
+        io.writeJSON(global.userItems, finalJson);
     }
 });
 

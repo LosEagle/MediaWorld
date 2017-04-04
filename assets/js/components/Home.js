@@ -4,11 +4,13 @@ require("../../css/2-components/home.scss");
 
 const fs = window.require("fs");
 const axios = require("axios");
+const global = require("../app/global.js");
+import IO from "../app/IO";
 
 const Home = React.createClass({
     getInitialState: function() {
         return {
-            listPath: "./assets/data/list.json",
+            listPath: global.userItems,
             jsonList: "",
             omdbData: ""
         };
@@ -19,10 +21,16 @@ const Home = React.createClass({
         this.fetchEpisodeData();
     },
 
+    componentWillMount: function() {
+        let io = new IO;
+        io.createFileIfNotExists(global.userItems);
+    },
+
     render: function() {
         let cards = [];
 
         cards = this.constructCardArray();
+
         return (
             <div className="row">
                 {cards}
@@ -58,39 +66,39 @@ const Home = React.createClass({
                 else
                     finalStateValue = item;
 
-                this.setState({ omdbData: finalStateValue});
+                this.setState({omdbData: finalStateValue});
             });
         });
     },
 
     constructCardArray: function() {
         let array = [];
-        let currentObject;
+        let currentObject = this.state.omdbData;
 
-        for (let i = 0; i <= this.state.omdbData.length - 1; i++) {
-            currentObject = this.state.omdbData[i];
+        if (!Array.isArray(currentObject)) return;
 
-            array.push(
+        currentObject = currentObject.map(function(item, i) {
+            return (
                 <div className="col s4" key={i}>
                     <div className="card small">
                         <div className="card-image">
-                            <img className="activator" src={currentObject.Poster} alt=""/>
+                            <img className="activator" src={item.Poster} alt=""/>
                             <span className=""></span>
                         </div>
                         <div className="card-content">
-                            <strong>{currentObject.Title} | S{currentObject.Season}E{currentObject.Episode} | {currentObject.Released}</strong>
-                            <p>{currentObject.Plot.substring(0,40)}</p>
+                            <strong>{item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong>
+                            <p>{item.Plot.substring(0,40)}</p>
                         </div>
                         <div className="card-reveal">
-                            <span className="card-title grey-text text-darken-4">{currentObject.Title}<i className="fa fa-times right"></i></span>
-                            <p>{currentObject.Plot}</p>
+                            <span className="card-title grey-text text-darken-4">{item.Title}<i className="fa fa-times right"></i></span>
+                            <p>{item.Plot}</p>
                         </div>
                     </div>
                 </div>
             );
-        }
+        });
 
-        return array;
+        return currentObject;
     }
 });
 
