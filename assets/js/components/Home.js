@@ -5,6 +5,7 @@ require("../../css/2-components/home.scss");
 const fs = window.require("fs");
 const axios = require("axios");
 const global = require("../app/global.js");
+import IO from "../app/IO";
 
 const Home = React.createClass({
     getInitialState: function() {
@@ -18,6 +19,11 @@ const Home = React.createClass({
     componentDidMount: function() {
         this.readListContents();
         this.fetchEpisodeData();
+    },
+
+    componentWillMount: function() {
+        let io = new IO;
+        io.createFileIfNotExists(global.userItems);
     },
 
     render: function() {
@@ -60,7 +66,7 @@ const Home = React.createClass({
                 else
                     finalStateValue = item;
 
-                this.setState({ omdbData: finalStateValue});
+                this.setState({omdbData: finalStateValue});
             });
         });
     },
@@ -68,7 +74,7 @@ const Home = React.createClass({
     constructCardArray: function() {
         let array = [];
         let currentObject = this.state.omdbData;
-        
+
         if (!Array.isArray(currentObject)) return;
 
         currentObject = currentObject.map(function(item, i) {

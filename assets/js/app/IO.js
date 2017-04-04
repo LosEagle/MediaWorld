@@ -34,12 +34,25 @@ export default class IO {
         });
     }
 
-    removeJSONEntry(path, entry) {
-        entry = parseInt(entry);
+    removeJSONEntry(path, entryIndex) {
+        entryIndex = parseInt(entryIndex);
         let currentJSON = this.readJSON(path);
 
-        currentJSON.splice(entry, 1);
+        currentJSON.splice(entryIndex, 1);
 
+        currentJSON = JSON.stringify(currentJSON, null, 4);
+
+        fs.writeFile(path, currentJSON, (err) => {
+            if (err)
+                throw err;
+        });
+    }
+
+    changeEntry(path, entryIndex, entry) {
+        let currentJSON = this.readJSON(path, entryIndex);
+        entryIndex = parseInt(entryIndex);
+
+        currentJSON[entryIndex] = entry;
         currentJSON = JSON.stringify(currentJSON, null, 4);
 
         fs.writeFile(path, currentJSON, (err) => {
