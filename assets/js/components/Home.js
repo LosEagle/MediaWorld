@@ -39,12 +39,9 @@ const Home = React.createClass({
     },
 
     readListContents: function() {
-        let data = fs.readFileSync(this.state.listPath, "utf8");
-
-        if (data === "")
-            this.state.jsonList = data;
-        else
-            this.state.jsonList = JSON.parse(data);
+        const io = new IO;
+        let data = io.readJSON(global.userItems);
+        this.setState({jsonList: data});
     },
 
     fetchEpisodeData: function() {
