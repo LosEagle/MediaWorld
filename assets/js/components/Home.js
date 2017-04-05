@@ -12,13 +12,9 @@ const Home = React.createClass({
         return {
             listPath: global.userItems,
             jsonList: "",
-            omdbData: ""
+            omdbData: "",
+            cards: ""
         };
-    },
-
-    componentDidMount: function() {
-        this.readListContents();
-        this.fetchEpisodeData();
     },
 
     componentWillMount: function() {
@@ -26,45 +22,61 @@ const Home = React.createClass({
         io.createFileIfNotExists(global.userItems);
     },
 
+    componentDidMount: function() {
+        this.readListContents();
+    },
+
     render: function() {
-        let cards = [];
-
-        cards = this.constructCardArray();
-
         return (
             <div className="row">
-                {cards}
+                {this.state.cards}
             </div>
         );
     },
 
     readListContents: function() {
         const io = new IO;
-        let data = io.readJSON(global.userItems);
-        this.setState({jsonList: data});
+        const data = io.readJSON(global.userItems);
+
+        if (data.length === 0) {
+            this.setState({
+                cards: <strong>Your watchlist is empty.</strong>
+            });
+        } else {
+            this.setState({jsonList: data}, () => {
+                this.fetchEpisodeData();
+            });
+        }
     },
 
     fetchEpisodeData: function() {
         let list = this.state.jsonList;
         let data = [];
-        let temp;
-        let item;
-        let currentData;
-        let finalStateValue;
+        let temp = [];
+        let tempPromise = [];
+        let item = 0;
+        let currentData = {};
+        let finalStateValue = {};
 
-        Object.keys(list).forEach((key,index) => {
-            axios.get(`http://www.omdbapi.com/?t=${list[index].name}&Season=${list[index].season}&Episode=${list[index].episode}`)
-            .then((response) => {
-                item = response.data;
+        Object.keys(list).forEach((key, index) => {
+            tempPromise.push(axios.get(`http://www.omdbapi.com/?t=${list[index].name}&Season=${list[index].season}&Episode=${list[index].episode}`));
+        });
+
+        axios.all(tempPromise).then((result) => {
+
+            result.forEach((key, index) => {
+                item = result[index].data;
                 currentData = this.state.omdbData;
 
                 if (currentData !== "")
                     finalStateValue = _.concat(item, currentData);
                 else
-                    finalStateValue = item;
+                    finalStateValue = Array(item);
 
                 this.setState({omdbData: finalStateValue});
             });
+
+            this.constructCardArray();
         });
     },
 
@@ -79,7 +91,7 @@ const Home = React.createClass({
                 <div className="col s4" key={i}>
                     <div className="card small">
                         <div className="card-image">
-                            <img className="activator" src={item.Poster} alt=""/>
+                            <img className="activator" src={item.Poster === "N/A" ? "" : item.Poster} alt=""/>
                             <span className=""></span>
                         </div>
                         <div className="card-content">
@@ -95,7 +107,7 @@ const Home = React.createClass({
             );
         });
 
-        return currentObject;
+        this.setState({cards: currentObject});
     }
 });
 

@@ -4,11 +4,11 @@
   "description": "MediaWorld",
   "main": "main.js",
   "scripts": {
-    "webpack": "./node_modules/.bin/webpack --watch",
-    "electron": "./node_modules/.bin/electron .",
+    "webpack": "webpack --watch",
+    "electron": "electron .",
     "electron:dist": "/home/miloslavnosek/work/reactwebpack/node_modules/electron/dist/electron ~/work/reactwebpack/",
-    "packager": "node_modules/.bin/electron-packager . mediaworld --all",
-    "eslint": "node_modules/.bin/eslint assets/js/ || true"
+    "packager": "electron-packager . mediaworld --all",
+    "eslint": "eslint assets/js/ || true"
   },
   "repository": "https://gitlab.com/nosek/MediaWorld",
   "keywords": [
@@ -43,7 +43,7 @@
     "file-loader": "^0.10.1",
     "node-sass": "^4.5.1",
     "sass-loader": "^6.0.3",
-    "style-loader": "^0.16.0",
+    "style-loader": "^0.16.1",
     "webpack": "^2.3.3",
     "yarn": "^0.21.3"
   }
