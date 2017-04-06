@@ -40,7 +40,16 @@ const Home = React.createClass({
 
         if (data.length === 0) {
             this.setState({
-                cards: <strong>Your watchlist is empty.</strong>
+                cards: <div>
+                            <div>
+                                <strong>
+                                        <i className="fa fa-exclamation-circle"></i> Your watchlist is empty.
+                                </strong>
+                            </div>
+                            <div className="section">
+                                Would you like to <a href="#userlist"><em>add</em></a> some entries?
+                            </div>
+                        </div>
             });
         } else {
             this.setState({jsonList: data}, () => {
