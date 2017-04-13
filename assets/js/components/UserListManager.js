@@ -24,6 +24,8 @@ const UserListManager = React.createClass({
     },
 
     render: function() {
+        $(".tooltipped").tooltip();
+
         return (
             <div className="row userListManager">
                 <table className="highlight centered col s12">
@@ -58,11 +60,11 @@ const UserListManager = React.createClass({
                     <td>{item.episode}</td>
                     <td>{this.state.releaseDates[i]}</td>
                     <td className="iconContainer">
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment episode"><i onClick={this.handleEpisodeInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement episode"><i onClick={this.handleEpisodeInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Remove entry"><i onClick={this.handleItemRemove} data-entry={i} className="fa fa-times"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment episode"><i onClick={this.handleEpisodeInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement episode"><i onClick={this.handleEpisodeInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Remove entry"><i onClick={this.handleItemRemove} data-entry={i} className="fa fa-times"></i></a>
                     </td>
                 </tr>
             );

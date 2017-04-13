@@ -96,24 +96,26 @@ const Home = React.createClass({
         if (!Array.isArray(currentObject)) return;
 
         currentObject = currentObject.map(function(item, i) {
-            return (
-                <div className="col s4" key={i}>
-                    <div className="card small">
-                        <div className="card-image">
-                            <img className="activator" src={item.Poster === "N/A" ? "" : item.Poster} alt=""/>
-                            <span className=""></span>
-                        </div>
-                        <div className="card-content">
-                            <strong>{item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong>
-                            <p>{item.Plot.substring(0,40)}</p>
-                        </div>
-                        <div className="card-reveal">
-                            <span className="card-title grey-text text-darken-4">{item.Title}<i className="fa fa-times right"></i></span>
-                            <p>{item.Plot}</p>
+            if (item.Plot) {
+                return (
+                    <div className="col s4" key={i}>
+                        <div className="card small">
+                            <div className="card-image">
+                                <img className="activator" src={item.Poster === "N/A" ? "" : item.Poster} alt=""/>
+                                <span className=""></span>
+                            </div>
+                            <div className="card-content">
+                                <strong>{item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong>
+                                <p>{item.Plot.substring(0,40)}</p>
+                            </div>
+                            <div className="card-reveal">
+                                <span className="card-title grey-text text-darken-4">{item.Title}<i className="fa fa-times right"></i></span>
+                                <p>{item.Plot}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            );
+                );
+            }
         });
 
         this.setState({cards: currentObject});
