@@ -7,7 +7,8 @@
     "webpack": "webpack --watch",
     "electron": "electron .",
     "electron:dist": "/home/miloslavnosek/work/reactwebpack/node_modules/electron/dist/electron ~/work/reactwebpack/",
-    "packager": "electron-packager . mediaworld --all",
+    "pack": "electron-packager . mediaworld --all",
+    "pack:win64": "electron-packager . mediaworld --platform=win32 --arch=x64",
     "eslint": "eslint assets/js/ || true"
   },
   "repository": "https://gitlab.com/nosek/MediaWorld",
