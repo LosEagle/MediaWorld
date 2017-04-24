@@ -7,6 +7,8 @@ const global = require("../app/global");
 const axios = require("axios");
 import IO from "../app/IO";
 
+const io = new IO;
+
 const UserListManager = React.createClass({
     getInitialState: function() {
         return {
@@ -17,7 +19,6 @@ const UserListManager = React.createClass({
     },
 
     componentWillMount: function() {
-        const io = new IO;
         this.state.list = io.readJSON(global.userItems);
         this.renderWithDates();
         this.createEntryRows();
@@ -47,7 +48,6 @@ const UserListManager = React.createClass({
     },
 
     createEntryRows: function() {
-        const io = new IO;
         let currentCollection = this.state.list;
 
         if (currentCollection === "") return;
@@ -76,7 +76,6 @@ const UserListManager = React.createClass({
     handleItemRemove: function(e) {
         e.preventDefault();
 
-        const io = new IO;
         let currentCollection = this.state.collection;
         let index = e.target.getAttribute("data-entry");
 
@@ -91,7 +90,6 @@ const UserListManager = React.createClass({
 
         const mode = e.target.getAttribute("data-mode");
 
-        const io = new IO;
         const childOverrideIndex = 1;
         let index = e.target.getAttribute("data-entry");
         let list = this.state.list;
@@ -121,7 +119,6 @@ const UserListManager = React.createClass({
 
         const mode = e.target.getAttribute("data-mode");
 
-        const io = new IO;
         const childOverrideIndex = 2;
         let index = e.target.getAttribute("data-entry");
         let list = this.state.list;

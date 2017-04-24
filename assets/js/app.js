@@ -13,9 +13,11 @@ const UserList = require("./components/UserList");
 const UserListManager = require("./components/UserListManager");
 const Calendar = require("./components/Calendar");
 const Sidebar = require("./components/Sidebar");
+const Preloader = require("./components/Preloader");
 
 const app = document.getElementById("app");
 const sidebar = document.getElementById("sidebar");
+const progressbar = document.getElementById("progressbar");
 
 const AppRouter = React.createClass({
     render: function() {
@@ -32,3 +34,4 @@ const AppRouter = React.createClass({
 
 ReactDOM.render(<AppRouter />, app);
 ReactDOM.render(<Sidebar />, sidebar);
+ReactDOM.render(<Preloader visibility="hidden" />, progressbar);
