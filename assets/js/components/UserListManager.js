@@ -111,7 +111,7 @@ const UserListManager = React.createClass({
 
         io.changeEntry(global.userItems, index, entry);
 
-        this.renderWithDates();
+        this.renderWithDates(index);
     },
 
     handleEpisodeInteraction: function(e) {
@@ -139,29 +139,45 @@ const UserListManager = React.createClass({
 
         io.changeEntry(global.userItems, index, entry);
 
-        this.renderWithDates();
+        this.renderWithDates(index);
     },
 
-    renderWithDates: function() {
+    renderWithDates: function(entry) {
         let list = this.state.list;
-        let tempPromise = [];
         let temp = [];
 
-        Object.keys(list).forEach((key, index) => {
-            tempPromise.push(axios.get(`http://www.omdbapi.com/?t=${list[index].name}&Season=${list[index].season}&Episode=${list[index].episode}`));
-        });
+        if (!entry) {
+            let tempPromise = [];
 
-        axios.all(tempPromise).then((result) => {
-            result.forEach((key, index) => {
-                if (result[index].data.Error)
-                    temp.push(result[index].data.Error);
-                else
-                    temp.push(result[index].data.Released);
+            Object.keys(list).forEach((key, index) => {
+                tempPromise.push(axios.get(`http://www.omdbapi.com/?t=${list[index].name}&Season=${list[index].season}&Episode=${list[index].episode}`));
             });
 
-            this.setState({releaseDates: temp});
-            this.createEntryRows();
-        });
+            axios.all(tempPromise).then((result) => {
+                result.forEach((key, index) => {
+                    if (result[index].data.Error)
+                        temp.push(result[index].data.Error);
+                    else
+                        temp.push(result[index].data.Released);
+                });
+
+                this.setState({releaseDates: temp});
+                this.createEntryRows();
+            });
+        } else {
+            let prevReleaseDates = this.state.releaseDates;
+            temp = prevReleaseDates;
+
+            axios.get(`http://www.omdbapi.com/?t=${list[entry].name}&Season=${list[entry].season}&Episode=${list[entry].episode}`).then((result) => {
+                if (result.data.Error)
+                    temp[entry] = result.data.Error;
+                else
+                    temp[entry] = result.data.Released;
+
+                this.setState({releaseDates: temp});
+                this.createEntryRows();
+            });
+        }
     }
 });
 
