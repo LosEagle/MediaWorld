@@ -24,6 +24,14 @@ const UserListManager = React.createClass({
         this.createEntryRows();
     },
 
+    componentWillUnmount: function() {
+        let tooltips = document.querySelectorAll(".material-tooltip");
+
+        for (let tooltip of tooltips) {
+            tooltip.remove();
+        }
+    },
+
     render: function() {
         $(".tooltipped").tooltip();
 
