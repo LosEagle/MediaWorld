@@ -15,6 +15,8 @@ function createWindow () {
     // Create the browser window.
     mainWindow = new BrowserWindow({width: 1024, height: 768});
 
+    mainWindow.setMenu(null);
+
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, "index.html"),
@@ -23,7 +25,8 @@ function createWindow () {
     }));
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if (global.process.resourcesPath.match(/node_modules/) !== null)
+        mainWindow.webContents.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on("closed", function () {

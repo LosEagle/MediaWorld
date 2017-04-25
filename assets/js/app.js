@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, Link, hashHistory } from "react-router";
 
+require("jquery");
 require("materialize-css");
 require("materialize-css/sass/materialize.scss");
 require("../css/main.sass");
@@ -11,10 +12,12 @@ const Home = require("./components/Home");
 const UserList = require("./components/UserList");
 const UserListManager = require("./components/UserListManager");
 const Calendar = require("./components/Calendar");
-const Navbar = require("./components/Navbar");
+const Sidebar = require("./components/Sidebar");
+const Preloader = require("./components/Preloader");
 
 const app = document.getElementById("app");
-const navbar = document.getElementById("navbar");
+const sidebar = document.getElementById("sidebar");
+const progressbar = document.getElementById("progressbar");
 
 const AppRouter = React.createClass({
     render: function() {
@@ -30,4 +33,5 @@ const AppRouter = React.createClass({
 });
 
 ReactDOM.render(<AppRouter />, app);
-ReactDOM.render(<Navbar />, navbar);
+ReactDOM.render(<Sidebar />, sidebar);
+ReactDOM.render(<Preloader visibility="hidden" />, progressbar);

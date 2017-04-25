@@ -7,6 +7,8 @@ const global = require("../app/global");
 const axios = require("axios");
 import IO from "../app/IO";
 
+const io = new IO;
+
 const UserListManager = React.createClass({
     getInitialState: function() {
         return {
@@ -17,13 +19,22 @@ const UserListManager = React.createClass({
     },
 
     componentWillMount: function() {
-        const io = new IO;
         this.state.list = io.readJSON(global.userItems);
         this.renderWithDates();
         this.createEntryRows();
     },
 
+    componentWillUnmount: function() {
+        let tooltips = document.querySelectorAll(".material-tooltip");
+
+        for (let tooltip of tooltips) {
+            tooltip.remove();
+        }
+    },
+
     render: function() {
+        $(".tooltipped").tooltip();
+
         return (
             <div className="row userListManager">
                 <table className="highlight centered col s12">
@@ -45,7 +56,6 @@ const UserListManager = React.createClass({
     },
 
     createEntryRows: function() {
-        const io = new IO;
         let currentCollection = this.state.list;
 
         if (currentCollection === "") return;
@@ -58,11 +68,11 @@ const UserListManager = React.createClass({
                     <td>{item.episode}</td>
                     <td>{this.state.releaseDates[i]}</td>
                     <td className="iconContainer">
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment episode"><i onClick={this.handleEpisodeInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement episode"><i onClick={this.handleEpisodeInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
-                        <a href="#" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Remove entry"><i onClick={this.handleItemRemove} data-entry={i} className="fa fa-times"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment episode"><i onClick={this.handleEpisodeInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement episode"><i onClick={this.handleEpisodeInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Remove entry"><i onClick={this.handleItemRemove} data-entry={i} className="fa fa-times"></i></a>
                     </td>
                 </tr>
             );
@@ -74,7 +84,6 @@ const UserListManager = React.createClass({
     handleItemRemove: function(e) {
         e.preventDefault();
 
-        const io = new IO;
         let currentCollection = this.state.collection;
         let index = e.target.getAttribute("data-entry");
 
@@ -89,7 +98,6 @@ const UserListManager = React.createClass({
 
         const mode = e.target.getAttribute("data-mode");
 
-        const io = new IO;
         const childOverrideIndex = 1;
         let index = e.target.getAttribute("data-entry");
         let list = this.state.list;
@@ -111,7 +119,7 @@ const UserListManager = React.createClass({
 
         io.changeEntry(global.userItems, index, entry);
 
-        this.renderWithDates();
+        this.renderWithDates(index);
     },
 
     handleEpisodeInteraction: function(e) {
@@ -119,7 +127,6 @@ const UserListManager = React.createClass({
 
         const mode = e.target.getAttribute("data-mode");
 
-        const io = new IO;
         const childOverrideIndex = 2;
         let index = e.target.getAttribute("data-entry");
         let list = this.state.list;
@@ -140,29 +147,45 @@ const UserListManager = React.createClass({
 
         io.changeEntry(global.userItems, index, entry);
 
-        this.renderWithDates();
+        this.renderWithDates(index);
     },
 
-    renderWithDates: function() {
+    renderWithDates: function(entry) {
         let list = this.state.list;
-        let tempPromise = [];
         let temp = [];
 
-        Object.keys(list).forEach((key, index) => {
-            tempPromise.push(axios.get(`http://www.omdbapi.com/?t=${list[index].name}&Season=${list[index].season}&Episode=${list[index].episode}`));
-        });
+        if (!entry) {
+            let tempPromise = [];
 
-        axios.all(tempPromise).then((result) => {
-            result.forEach((key, index) => {
-                if (result[index].data.Error)
-                    temp.push(result[index].data.Error);
-                else
-                    temp.push(result[index].data.Released);
+            Object.keys(list).forEach((key, index) => {
+                tempPromise.push(axios.get(`http://www.omdbapi.com/?t=${list[index].name}&Season=${list[index].season}&Episode=${list[index].episode}`));
             });
 
-            this.setState({releaseDates: temp});
-            this.createEntryRows();
-        });
+            axios.all(tempPromise).then((result) => {
+                result.forEach((key, index) => {
+                    if (result[index].data.Error)
+                        temp.push(result[index].data.Error);
+                    else
+                        temp.push(result[index].data.Released);
+                });
+
+                this.setState({releaseDates: temp});
+                this.createEntryRows();
+            });
+        } else {
+            let prevReleaseDates = this.state.releaseDates;
+            temp = prevReleaseDates;
+
+            axios.get(`http://www.omdbapi.com/?t=${list[entry].name}&Season=${list[entry].season}&Episode=${list[entry].episode}`).then((result) => {
+                if (result.data.Error)
+                    temp[entry] = result.data.Error;
+                else
+                    temp[entry] = result.data.Released;
+
+                this.setState({releaseDates: temp});
+                this.createEntryRows();
+            });
+        }
     }
 });
 
