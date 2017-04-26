@@ -1,21 +1,23 @@
 import React from "react";
+import * as global from "../../app/global";
+import IO from "../../app/IO";
 
-const fs = window.require("fs");
-const global = require("../app/global");
-import IO from "../app/IO";
+const io = new IO;
 
-const UserListRemove = React.createClass({
-    getInitialState: function() {
-        return {
+class UserListRemove extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
             collection: []
         };
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.createCollectionArray();
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div className="row">
                 <ul className="collection col s12">
@@ -23,10 +25,9 @@ const UserListRemove = React.createClass({
                 </ul>
             </div>
         );
-    },
+    }
 
-    createCollectionArray: function() {
-        const io = new IO;
+    createCollectionArray() {
         let currentCollection = io.readJSON(global.userItems);
 
         if (currentCollection === "") return;
@@ -36,19 +37,18 @@ const UserListRemove = React.createClass({
                 <li key={i} className="collection-item">
                     <strong>{item.name}</strong> Season:{item.season} Episode:{item.episode}
                     <a href="#" className="secondary-content">
-                        <i onClick={this.handleItemRemove} data-entry={i} className="fa fa-times"></i>
+                        <i onClick={this.handleItemRemove.bind(this)} data-entry={i} className="fa fa-times"></i>
                     </a>
                 </li>
             );
         });
 
         this.setState({collection: currentCollection});
-    },
+    }
 
-    handleItemRemove: function(e) {
+    handleItemRemove(e) {
         e.preventDefault();
 
-        const io = new IO;
         let currentCollection = this.state.collection;
         let index = e.target.getAttribute("data-entry");
 
@@ -57,6 +57,6 @@ const UserListRemove = React.createClass({
 
         this.setState({collection: currentCollection});
     }
-});
+}
 
 module.exports = UserListRemove;

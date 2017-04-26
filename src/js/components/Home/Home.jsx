@@ -1,41 +1,39 @@
 import React from "react";
+import * as axios from "axios";
+import * as global from "../../app/global.js";
+import IO from "../../app/IO";
 
-require("../../css/2-components/home.scss");
+const io = new IO;
 
-const fs = window.require("fs");
-const axios = require("axios");
-const global = require("../app/global.js");
-import IO from "../app/IO";
+class Home extends React.Component {
+    constructor() {
+        super();
 
-const Home = React.createClass({
-    getInitialState: function() {
-        return {
+        this.state = {
             listPath: global.userItems,
             jsonList: "",
             omdbData: "",
             cards: ""
         };
-    },
+    }
 
-    componentWillMount: function() {
-        let io = new IO;
+    componentWillMount() {
         io.createFileIfNotExists(global.userItems);
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.readListContents();
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div className="row">
                 {this.state.cards}
             </div>
         );
-    },
+    }
 
-    readListContents: function() {
-        const io = new IO;
+    readListContents() {
         const data = io.readJSON(global.userItems);
 
         if (data.length === 0) {
@@ -43,7 +41,7 @@ const Home = React.createClass({
                 cards: <div>
                             <div>
                                 <strong>
-                                        <i className="fa fa-exclamation-circle"></i> Your watchlist is empty.
+                                    <i className="fa fa-exclamation-circle"></i> Your watchlist is empty.
                                 </strong>
                             </div>
                             <div className="section">
@@ -56,9 +54,9 @@ const Home = React.createClass({
                 this.fetchEpisodeData();
             });
         }
-    },
+    }
 
-    fetchEpisodeData: function() {
+    fetchEpisodeData() {
         let list = this.state.jsonList;
         let data = [];
         let temp = [];
@@ -87,9 +85,9 @@ const Home = React.createClass({
 
             this.constructCardArray();
         });
-    },
+    }
 
-    constructCardArray: function() {
+    constructCardArray() {
         let array = [];
         let currentObject = this.state.omdbData;
 
@@ -120,6 +118,6 @@ const Home = React.createClass({
 
         this.setState({cards: currentObject});
     }
-});
+}
 
 module.exports = Home;

@@ -1,38 +1,37 @@
 import React from "react";
-
-require("../../css/2-components/userListManager.sass");
-
-const fs = window.require("fs");
-const global = require("../app/global");
-const axios = require("axios");
-import IO from "../app/IO";
+import "./userListManager.sass";
+import * as global from "../../app/global";
+import * as axios from "axios";
+import IO from "../../app/IO";
 
 const io = new IO;
 
-const UserListManager = React.createClass({
-    getInitialState: function() {
-        return {
+class UserListManager extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
             collection: [],
             list: {},
             releaseDates: []
         };
-    },
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         this.state.list = io.readJSON(global.userItems);
         this.renderWithDates();
         this.createEntryRows();
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         let tooltips = document.querySelectorAll(".material-tooltip");
 
         for (let tooltip of tooltips) {
             tooltip.remove();
         }
-    },
+    }
 
-    render: function() {
+    render() {
         $(".tooltipped").tooltip();
 
         return (
@@ -53,9 +52,9 @@ const UserListManager = React.createClass({
                 </table>
             </div>
         );
-    },
+    }
 
-    createEntryRows: function() {
+    createEntryRows() {
         let currentCollection = this.state.list;
 
         if (currentCollection === "") return;
@@ -68,20 +67,20 @@ const UserListManager = React.createClass({
                     <td>{item.episode}</td>
                     <td>{this.state.releaseDates[i]}</td>
                     <td className="iconContainer">
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment episode"><i onClick={this.handleEpisodeInteraction} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement episode"><i onClick={this.handleEpisodeInteraction} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Remove entry"><i onClick={this.handleItemRemove} data-entry={i} className="fa fa-times"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment episode"><i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement episode"><i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Remove entry"><i onClick={this.handleItemRemove.bind(this)} data-entry={i} className="fa fa-times"></i></a>
                     </td>
                 </tr>
             );
         });
 
         this.setState({collection: currentCollection});
-    },
+    }
 
-    handleItemRemove: function(e) {
+    handleItemRemove(e) {
         e.preventDefault();
 
         let currentCollection = this.state.collection;
@@ -91,9 +90,9 @@ const UserListManager = React.createClass({
         currentCollection.splice(index, 1);
 
         this.setState({collection: currentCollection});
-    },
+    }
 
-    handleSeasonInteraction: function(e) {
+    handleSeasonInteraction(e) {
         e.preventDefault();
 
         const mode = e.target.getAttribute("data-mode");
@@ -120,9 +119,9 @@ const UserListManager = React.createClass({
         io.changeEntry(global.userItems, index, entry);
 
         this.renderWithDates(index);
-    },
+    }
 
-    handleEpisodeInteraction: function(e) {
+    handleEpisodeInteraction(e) {
         e.preventDefault();
 
         const mode = e.target.getAttribute("data-mode");
@@ -148,9 +147,9 @@ const UserListManager = React.createClass({
         io.changeEntry(global.userItems, index, entry);
 
         this.renderWithDates(index);
-    },
+    }
 
-    renderWithDates: function(entry) {
+    renderWithDates(entry) {
         let list = this.state.list;
         let temp = [];
 
@@ -187,6 +186,6 @@ const UserListManager = React.createClass({
             });
         }
     }
-});
+}
 
 module.exports = UserListManager;

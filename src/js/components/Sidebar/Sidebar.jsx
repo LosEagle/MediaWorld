@@ -1,7 +1,11 @@
 import React from "react";
 
-const Sidebar = React.createClass({
-    render: function() {
+class Sidebar extends React.Component {
+    constructor() {
+        super();
+    }
+
+    render() {
         return (
             <ul className="side-nav fixed grey darken-3">
                 <li><a className="waves-effect white-text text-darken-1" href="#">MediaWorld <sup>WORK IN PROGRESS</sup></a></li>
@@ -12,7 +16,6 @@ const Sidebar = React.createClass({
             </ul>
         );
     }
-
-});
+}
 
 module.exports = Sidebar;

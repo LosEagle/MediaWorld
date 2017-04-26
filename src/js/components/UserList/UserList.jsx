@@ -1,15 +1,19 @@
 import React from "react";
+import * as _ from "lodash";
+import * as global from "../../app/global";
+import IO from "../../app/IO";
 
-const fs = window.require("fs");
-const _  = require("lodash");
-const global = require("../app/global");
-import IO from "../app/IO";
+const io = new IO;
 
-const UserList = React.createClass({
-    render: function() {
+class UserList extends React.Component {
+    constructor() {
+        super();
+    }
+
+    render() {
         return (
             <div className="row">
-                <form onSubmit={this.handleUserListForm} className="col s12">
+                <form onSubmit={this.handleUserListForm.bind(this)} className="col s12">
                     <div className="row">
                         <div className="input-field col s12">
                             <input id="name" type="text" className="validate" ref="name"/>
@@ -32,10 +36,9 @@ const UserList = React.createClass({
                 </form>
             </div>
         );
-    },
+    }
 
-    handleUserListForm: function(event) {
-        let io = new IO;
+    handleUserListForm(event) {
         let name = this.refs.name.value;
         let season = this.refs.season.value;
         let episode = this.refs.episode.value;
@@ -56,6 +59,6 @@ const UserList = React.createClass({
         io.createFileIfNotExists(global.userItems);
         io.writeJSON(global.userItems, finalJson);
     }
-});
+}
 
 module.exports = UserList;

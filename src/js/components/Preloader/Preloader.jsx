@@ -1,14 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
-require("../../css/2-components/preloader.sass");
-const axios = require("axios");
+import "./preloader.sass";
+import * as axios from "axios";
 
 const progressbar = document.getElementById("progressbar");
 
-const Preloader = React.createClass({
+class Preloader extends React.Component {
+    constructor() {
+        super();
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         axios.interceptors.request.use((config) => {
             this.show();
             return config;
@@ -18,23 +20,23 @@ const Preloader = React.createClass({
             this.hide();
             return response;
         });
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div className={`preloader progress ${this.props.visibility}`}>
                 <div className="indeterminate"></div>
             </div>
         );
-    },
+    }
 
-    show: function() {
+    show() {
         ReactDOM.render(<Preloader />, progressbar);
-    },
+    }
 
-    hide: function() {
+    hide() {
         ReactDOM.render(<Preloader visibility="hidden" />, progressbar);
     }
-});
+}
 
 module.exports = Preloader;

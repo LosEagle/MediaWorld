@@ -13,11 +13,7 @@
   },
   "repository": "https://gitlab.com/nosek/MediaWorld",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "MediaWorld"
   ],
   "author": "Eagle",
   "license": "MIT",
@@ -41,6 +37,7 @@
     "css-loader": "^0.26.1",
     "electron-packager": "^8.6.0",
     "eslint": "^3.18.0",
+    "eslint-loader": "^1.7.1",
     "file-loader": "^0.10.1",
     "node-sass": "^4.5.1",
     "sass-loader": "^6.0.3",

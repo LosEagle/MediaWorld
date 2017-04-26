@@ -1,36 +1,40 @@
 import React from "react";
+import "fullcalendar";
+import "fullcalendar/dist/fullcalendar.css";
+import "./calendar.sass";
+import * as global from "../../app/global";
+import IO from "../../app/IO";
+import axios from "axios";
 
-require("fullcalendar");
-require("fullcalendar/dist/fullcalendar.css");
-require("../../css/2-components/calendar.sass");
-const global = require("../app/global");
-import IO from "../app/IO";
-const axios = require("axios");
+const io = new IO;
 
-const Calendar = React.createClass({
-    componentDidMount: function() {
+class Calendar extends React.Component {
+    constructor() {
+        super();
+    }
+
+    componentDidMount() {
         this.initFullCalendar();
         this.getShows();
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div id="calendar" className="calendar" ref="calendar"></div>
         );
-    },
+    }
 
-    initFullCalendar: function() {
+    initFullCalendar() {
         $("#calendar").fullCalendar({
             header: {
-                left: "prev,next today",
+                left: "prev, next today",
                 center: "title",
                 right: "listMonth, month, basicWeek, basicDay"
             }
         });
-    },
+    }
 
-    getShows: function() {
-        const io = new IO;
+    getShows() {
         let currentJSON = io.readJSON(global.userItems);
 
         for (let item of currentJSON) {
@@ -46,6 +50,6 @@ const Calendar = React.createClass({
             });
         }
     }
-});
+}
 
 module.exports = Calendar;

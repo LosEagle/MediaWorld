@@ -2,7 +2,7 @@ var path = require("path");
 var webpack = require("webpack");
 
 module.exports = {
-    entry: path.resolve(__dirname, "assets/js/app.js"),
+    entry: path.resolve(__dirname, "src/js/app.jsx"),
 
     output: {
         path: path.resolve(__dirname, "build/"),
@@ -13,7 +13,13 @@ module.exports = {
     module: {
         loaders: [
             {
+                enforce: "pre",
                 test: /(\.js$|\.jsx$)/,
+                loader: "eslint-loader"
+            },
+            {
+                test: /(\.js$|\.jsx$)/,
+                exclude: /node_modules/,
                 query: {
                     presets: ["react", "es2015"]
                 },

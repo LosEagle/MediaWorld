@@ -1,5 +1,5 @@
-const fs = window.require("fs");
-const _  = require("lodash");
+import * as fs from "fs";
+import * as _  from "lodash";
 
 export default class IO {
     createFileIfNotExists(path) {
