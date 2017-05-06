@@ -13,6 +13,7 @@ import UserListManager from "./components/UserListManager/UserListManager.jsx";
 import Calendar from "./components/Calendar/Calendar.jsx";
 import Sidebar from "./components/Sidebar/Sidebar.jsx";
 import Preloader from "./components/Preloader/Preloader.jsx";
+import Detail from "./components/Detail/Detail.jsx";
 
 const app = document.getElementById("app");
 const sidebar = document.getElementById("sidebar");
@@ -30,6 +31,8 @@ class AppRouter extends React.Component {
                 <Route path={"/userlist"} component={UserList} />
                 <Route path={"/userlistmanager"} component={UserListManager} />
                 <Route path={"/calendar"} component={Calendar} />
+                <Route path={"/detail/:info"} component={Detail} />
+                <Route path={"*"} component={Home} />
             </Router>
         );
     }

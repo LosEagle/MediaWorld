@@ -88,6 +88,8 @@ class Home extends React.Component {
 
         currentObject = currentObject.map(function(item, i) {
             if (item.Plot) {
+                const detailUrl = `#detail/${item.imdbID}`;
+
                 return (
                     <div className="col s4" key={i}>
                         <div className="card small">
@@ -96,7 +98,7 @@ class Home extends React.Component {
                                 <span className=""></span>
                             </div>
                             <div className="card-content">
-                                <strong>{item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong>
+                                <a href={detailUrl}><strong>{item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong></a>
                                 <p>{item.Plot.substring(0,40)}</p>
                             </div>
                             <div className="card-reveal">
