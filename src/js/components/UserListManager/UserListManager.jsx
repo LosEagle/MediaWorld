@@ -1,10 +1,11 @@
 import React from "react";
 import "./userListManager.sass";
 import * as global from "../../app/global";
-import * as axios from "axios";
 import IO from "../../app/IO";
+import ShowAPI from "../../app/ShowAPI";
 
 const io = new IO;
+const show = new ShowAPI;
 
 class UserListManager extends React.Component {
     constructor() {
@@ -12,13 +13,13 @@ class UserListManager extends React.Component {
 
         this.state = {
             collection: [],
-            list: {},
+            entryData: {},
             releaseDates: []
         };
     }
 
     componentWillMount() {
-        this.state.list = io.readJSON(global.userItems);
+        this.state.entryData = io.readJSON(global.userItems);
         this.renderWithDates();
         this.createEntryRows();
     }
@@ -55,7 +56,7 @@ class UserListManager extends React.Component {
     }
 
     createEntryRows() {
-        let currentCollection = this.state.list;
+        let currentCollection = this.state.entryData;
 
         if (currentCollection === "") return;
 
@@ -97,12 +98,10 @@ class UserListManager extends React.Component {
 
         const mode = e.target.getAttribute("data-mode");
 
-        const childOverrideIndex = 1;
         let index = e.target.getAttribute("data-entry");
-        let list = this.state.list;
-        let entry = list[index];
+        const entryData = this.state.entryData;
+        let entry = entryData[index];
         let season;
-        let currentCollection = this.state.collection;
 
         season = parseInt(entry.season);
 
@@ -126,12 +125,10 @@ class UserListManager extends React.Component {
 
         const mode = e.target.getAttribute("data-mode");
 
-        const childOverrideIndex = 2;
         let index = e.target.getAttribute("data-entry");
-        let list = this.state.list;
-        let entry = list[index];
+        const entryData = this.state.entryData;
+        let entry = entryData[index];
         let episode;
-        let currentCollection = this.state.collection;
 
         episode = parseInt(entry.episode);
 
@@ -150,17 +147,11 @@ class UserListManager extends React.Component {
     }
 
     renderWithDates(entry) {
-        let list = this.state.list;
+        const entryData = this.state.entryData;
         let temp = [];
 
         if (!entry) {
-            let tempPromise = [];
-
-            Object.keys(list).forEach((key, index) => {
-                tempPromise.push(axios.get(`http://www.omdbapi.com/?t=${list[index].name}&Season=${list[index].season}&Episode=${list[index].episode}`));
-            });
-
-            axios.all(tempPromise).then((result) => {
+            show.getMultipleEpisodes(entryData).then((result) => {
                 result.forEach((key, index) => {
                     if (result[index].data.Error)
                         temp.push(result[index].data.Error);
@@ -175,7 +166,7 @@ class UserListManager extends React.Component {
             let prevReleaseDates = this.state.releaseDates;
             temp = prevReleaseDates;
 
-            axios.get(`http://www.omdbapi.com/?t=${list[entry].name}&Season=${list[entry].season}&Episode=${list[entry].episode}`).then((result) => {
+            show.getEpisode(entryData[entry].name, entryData[entry].season, entryData[entry].episode).then((result) => {
                 if (result.data.Error)
                     temp[entry] = result.data.Error;
                 else

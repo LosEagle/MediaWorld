@@ -4,9 +4,10 @@ import "fullcalendar/dist/fullcalendar.css";
 import "./calendar.sass";
 import * as global from "../../app/global";
 import IO from "../../app/IO";
-import axios from "axios";
+import ShowAPI from "../../app/ShowAPI";
 
 const io = new IO;
+const show = new ShowAPI;
 
 class Calendar extends React.Component {
     constructor() {
@@ -38,14 +39,15 @@ class Calendar extends React.Component {
         let currentJSON = io.readJSON(global.userItems);
 
         for (let item of currentJSON) {
-            axios.get(`http://www.omdbapi.com/?t=${item.name}&Season=${item.season}&Episode=${item.episode}`).then((response) => {
-                let eventObj = {
+            show.getEpisode(item.name, item.season, item.episode).then((response) => {
+                const eventObj = {
                     title: `${item.name} - ${response.data.Title} - S${response.data.Season}E${response.data.Episode}`,
                     start: new Date(response.data.Released),
                     end: new Date(response.data.Released),
                     editable: false,
                     allDay: true
                 };
+
                 $("#calendar").fullCalendar("renderEvent", eventObj, true);
             });
         }

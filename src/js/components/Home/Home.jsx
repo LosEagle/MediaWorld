@@ -1,19 +1,19 @@
 import React from "react";
-import * as axios from "axios";
-import * as global from "../../app/global.js";
+import * as global from "../../app/global";
 import IO from "../../app/IO";
+import ShowAPI from "../../app/ShowAPI";
 
 const io = new IO;
+const show = new ShowAPI;
 
 class Home extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            listPath: global.userItems,
-            jsonList: "",
-            omdbData: "",
-            cards: ""
+            entryData: "",
+            renderData: "",
+            componentTemplate: ""
         };
     }
 
@@ -28,7 +28,7 @@ class Home extends React.Component {
     render() {
         return (
             <div className="row">
-                {this.state.cards}
+                {this.state.componentTemplate}
             </div>
         );
     }
@@ -38,58 +38,51 @@ class Home extends React.Component {
 
         if (data.length === 0) {
             this.setState({
-                cards: <div>
-                            <div>
-                                <strong>
-                                    <i className="fa fa-exclamation-circle"></i> Your watchlist is empty.
-                                </strong>
-                            </div>
-                            <div className="section">
-                                Would you like to <a href="#userlist"><em>add</em></a> some entries?
-                            </div>
-                        </div>
+                componentTemplate:
+                                    <div>
+                                        <div>
+                                            <strong>
+                                                <i className="fa fa-exclamation-circle"></i> Your watchlist is empty.
+                                            </strong>
+                                        </div>
+                                        <div className="section">
+                                            Would you like to <a href="#userlist"><em>add</em></a> some entries?
+                                        </div>
+                                    </div>
             });
         } else {
-            this.setState({jsonList: data}, () => {
+            this.setState({entryData: data}, () => {
                 this.fetchEpisodeData();
             });
         }
     }
 
     fetchEpisodeData() {
-        let list = this.state.jsonList;
-        let data = [];
-        let temp = [];
-        let tempPromise = [];
-        let item = 0;
+        const entryData = this.state.entryData;
         let currentData = {};
-        let finalStateValue = {};
+        let finalData;
 
-        Object.keys(list).forEach((key, index) => {
-            tempPromise.push(axios.get(`http://www.omdbapi.com/?t=${list[index].name}&Season=${list[index].season}&Episode=${list[index].episode}`));
-        });
-
-        axios.all(tempPromise).then((result) => {
-
+        show.getMultipleEpisodes(entryData).then((result) => {
             result.forEach((key, index) => {
-                item = result[index].data;
-                currentData = this.state.omdbData;
+                const currentItem = result[index].data;
 
-                if (currentData !== "")
-                    finalStateValue = _.concat(item, currentData);
-                else
-                    finalStateValue = Array(item);
-
-                this.setState({omdbData: finalStateValue});
+                if (typeof finalData !== "undefined")
+                    finalData = _.concat(currentItem, finalData);
+                else {
+                    finalData = currentItem;
+                }
             });
 
-            this.constructCardArray();
+            this.setState({
+                renderData: finalData
+            });
+
+            this.makeTemplate();
         });
     }
 
-    constructCardArray() {
-        let array = [];
-        let currentObject = this.state.omdbData;
+    makeTemplate() {
+        let currentObject = this.state.renderData;
 
         if (!Array.isArray(currentObject)) return;
 
@@ -116,7 +109,7 @@ class Home extends React.Component {
             }
         });
 
-        this.setState({cards: currentObject});
+        this.setState({componentTemplate: currentObject});
     }
 }
 
