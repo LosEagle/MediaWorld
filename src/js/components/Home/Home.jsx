@@ -2,6 +2,7 @@ import React from "react";
 import * as global from "../../app/global";
 import IO from "../../app/IO";
 import ShowAPI from "../../app/ShowAPI";
+import "./home.sass";
 
 const io = new IO;
 const show = new ShowAPI;
@@ -27,7 +28,7 @@ class Home extends React.Component {
 
     render() {
         return (
-            <div className="row">
+            <div className="row home">
                 {this.state.componentTemplate}
             </div>
         );
