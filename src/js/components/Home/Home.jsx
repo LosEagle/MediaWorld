@@ -34,7 +34,7 @@ class Home extends React.Component {
     }
 
     readListContents() {
-        const data = io.readJSON(global.userItems);
+        const data = io.read(global.userItems);
 
         if (data.length === 0) {
             this.setState({
@@ -84,7 +84,13 @@ class Home extends React.Component {
     makeTemplate() {
         let currentObject = this.state.renderData;
 
-        if (!Array.isArray(currentObject)) return;
+        if (!Array.isArray(currentObject)) {
+            let temp;
+
+            temp = currentObject;
+            currentObject = [];
+            currentObject.push(temp);
+        }
 
         currentObject = currentObject.map(function(item, i) {
             if (item.Plot) {

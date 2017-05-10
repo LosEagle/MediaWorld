@@ -8,7 +8,7 @@ export default class IO {
         }
     }
 
-    readJSON(path) {
+    read(path) {
         let data = fs.readFileSync(path, "utf8");
 
         if (data === "")
@@ -17,14 +17,14 @@ export default class IO {
             return JSON.parse(data);
     }
 
-    writeJSON(path, JSONOutput) {
+    append(path, output) {
         let finalValue;
-        let currentJSON = this.readJSON(path);
+        let currentJSON = this.read(path);
 
         if (currentJSON !== "")
-            finalValue = _.concat(currentJSON, JSONOutput);
+            finalValue = _.concat(currentJSON, output);
         else
-            finalValue = JSONOutput;
+            finalValue = output;
 
         finalValue = JSON.stringify(finalValue, null, 4);
 
@@ -34,9 +34,9 @@ export default class IO {
         });
     }
 
-    removeJSONEntry(path, entryIndex) {
+    removeEntry(path, entryIndex) {
         entryIndex = parseInt(entryIndex);
-        let currentJSON = this.readJSON(path);
+        let currentJSON = this.read(path);
 
         currentJSON.splice(entryIndex, 1);
 
@@ -49,13 +49,22 @@ export default class IO {
     }
 
     changeEntry(path, entryIndex, entry) {
-        let currentJSON = this.readJSON(path, entryIndex);
+        let currentJSON = this.read(path, entryIndex);
         entryIndex = parseInt(entryIndex);
 
         currentJSON[entryIndex] = entry;
         currentJSON = JSON.stringify(currentJSON, null, 4);
 
         fs.writeFile(path, currentJSON, (err) => {
+            if (err)
+                throw err;
+        });
+    }
+
+    write(path, output) {
+        output = JSON.stringify(output, null, 4);
+
+        fs.writeFile(path, output, (err) => {
             if (err)
                 throw err;
         });

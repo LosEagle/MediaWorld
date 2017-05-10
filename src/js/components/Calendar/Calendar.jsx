@@ -36,7 +36,7 @@ class Calendar extends React.Component {
     }
 
     getShows() {
-        let currentJSON = io.readJSON(global.userItems);
+        let currentJSON = io.read(global.userItems);
 
         for (let item of currentJSON) {
             show.getEpisode(item.name, item.season, item.episode).then((response) => {

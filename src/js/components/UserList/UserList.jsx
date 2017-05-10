@@ -57,7 +57,7 @@ class UserList extends React.Component {
         }];
 
         io.createFileIfNotExists(global.userItems);
-        io.writeJSON(global.userItems, finalJson);
+        io.append(global.userItems, finalJson);
     }
 }
 

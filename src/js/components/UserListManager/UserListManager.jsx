@@ -19,7 +19,7 @@ class UserListManager extends React.Component {
     }
 
     componentWillMount() {
-        this.state.entryData = io.readJSON(global.userItems);
+        this.state.entryData = io.read(global.userItems);
         this.renderWithDates();
         this.createEntryRows();
     }
@@ -87,7 +87,7 @@ class UserListManager extends React.Component {
         let currentCollection = this.state.collection;
         let index = e.target.getAttribute("data-entry");
 
-        io.removeJSONEntry(global.userItems, index);
+        io.removeEntry(global.userItems, index);
         currentCollection.splice(index, 1);
 
         this.setState({collection: currentCollection});
