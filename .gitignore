@@ -1,6 +1,6 @@
 node_modules
 build/*
 .vscode/*
-assets/data/list.json
 npm-debug\.log
 out/*
+src/data/list.json
