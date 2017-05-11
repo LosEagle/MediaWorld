@@ -11,17 +11,20 @@ class UserListManager extends React.Component {
     constructor() {
         super();
 
+        this.releaseDates = [];
+        this.entryData = [];
         this.state = {
-            collection: [],
-            entryData: {},
-            releaseDates: []
+            collection: []
         };
     }
 
     componentWillMount() {
-        this.state.entryData = io.read(global.userItems);
+        this.entryData = io.read(global.userItems);
+    }
+
+    componentDidMount() {
         this.renderWithDates();
-        this.createEntryRows();
+        this.prepareTemplate();
     }
 
     componentWillUnmount() {
@@ -55,8 +58,8 @@ class UserListManager extends React.Component {
         );
     }
 
-    createEntryRows() {
-        let currentCollection = this.state.entryData;
+    prepareTemplate() {
+        let currentCollection = this.entryData;
 
         if (currentCollection === "") return;
 
@@ -66,7 +69,7 @@ class UserListManager extends React.Component {
                     <td><strong>{item.name}</strong></td>
                     <td>{item.season}</td>
                     <td>{item.episode}</td>
-                    <td>{this.state.releaseDates[i]}</td>
+                    <td>{this.releaseDates[i]}</td>
                     <td className="iconContainer">
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
@@ -99,11 +102,9 @@ class UserListManager extends React.Component {
         const mode = e.target.getAttribute("data-mode");
 
         let index = e.target.getAttribute("data-entry");
-        const entryData = this.state.entryData;
+        const entryData = this.entryData;
         let entry = entryData[index];
-        let season;
-
-        season = parseInt(entry.season);
+        let season = parseInt(entry.season);
 
         if (mode === "increment")
             season += 1;
@@ -126,7 +127,7 @@ class UserListManager extends React.Component {
         const mode = e.target.getAttribute("data-mode");
 
         let index = e.target.getAttribute("data-entry");
-        const entryData = this.state.entryData;
+        const entryData = this.entryData;
         let entry = entryData[index];
         let episode;
 
@@ -147,7 +148,7 @@ class UserListManager extends React.Component {
     }
 
     renderWithDates(entry) {
-        const entryData = this.state.entryData;
+        const entryData = this.entryData;
         let temp = [];
 
         if (!entry) {
@@ -159,11 +160,11 @@ class UserListManager extends React.Component {
                         temp.push(result[index].data.Released);
                 });
 
-                this.setState({releaseDates: temp});
-                this.createEntryRows();
+                this.releaseDates = temp;
+                this.prepareTemplate();
             });
         } else {
-            let prevReleaseDates = this.state.releaseDates;
+            let prevReleaseDates = this.releaseDates;
             temp = prevReleaseDates;
 
             show.getEpisode(entryData[entry].name, entryData[entry].season, entryData[entry].episode).then((result) => {
@@ -172,8 +173,8 @@ class UserListManager extends React.Component {
                 else
                     temp[entry] = result.data.Released;
 
-                this.setState({releaseDates: temp});
-                this.createEntryRows();
+                this.releaseDates = temp;
+                this.prepareTemplate();
             });
         }
     }

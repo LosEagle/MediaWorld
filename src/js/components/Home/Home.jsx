@@ -11,10 +11,10 @@ class Home extends React.Component {
     constructor() {
         super();
 
+        this.entryData;
         this.state = {
-            entryData: "",
-            renderData: "",
-            componentTemplate: ""
+            renderData: [],
+            allowTemplRender: false
         };
     }
 
@@ -23,45 +23,31 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        this.readListContents();
+        this.entryData = io.read(global.userItems);
+        this.fetchEpisodeData();
     }
 
     render() {
-        return (
-            <div className="row home">
-                {this.state.componentTemplate}
-            </div>
-        );
-    }
+        if (!this.state.allowTemplRender) return (<div className="row home"></div>);
 
-    readListContents() {
-        const data = io.read(global.userItems);
-
-        if (data.length === 0) {
-            this.setState({
-                componentTemplate:
-                                    <div>
-                                        <div>
-                                            <strong>
-                                                <i className="fa fa-exclamation-circle"></i> Your watchlist is empty.
-                                            </strong>
-                                        </div>
-                                        <div className="section">
-                                            Would you like to <a href="#userlist"><em>add</em></a> some entries?
-                                        </div>
-                                    </div>
-            });
+        if (this.state.renderData.length === 0) {
+            return (
+                <div className="row home">
+                    { this.showTemplEmptyWatchlist() }
+                </div>
+            );
         } else {
-            this.setState({entryData: data}, () => {
-                this.fetchEpisodeData();
-            });
+            return (
+                <div className="row home">
+                    { this.state.renderData.map(this.showTemplCards) }
+                </div>
+            );
         }
     }
 
     fetchEpisodeData() {
-        const entryData = this.state.entryData;
-        let currentData = {};
-        let finalData;
+        const entryData = this.entryData;
+        let finalData = [];
 
         show.getMultipleEpisodes(entryData).then((result) => {
             result.forEach((key, index) => {
@@ -70,55 +56,55 @@ class Home extends React.Component {
                 if (typeof finalData !== "undefined")
                     finalData = _.concat(currentItem, finalData);
                 else {
-                    finalData = currentItem;
+                    finalData.push(currentItem);
                 }
             });
 
             this.setState({
-                renderData: finalData
+                renderData: finalData,
+                allowTemplRender: true
             });
-
-            this.makeTemplate();
         });
     }
 
-    makeTemplate() {
-        let currentObject = this.state.renderData;
+    showTemplCards(item, i) {
+        if (item.Plot) {
+            const detailUrl = `#detail/${item.imdbID}`;
 
-        if (!Array.isArray(currentObject)) {
-            let temp;
-
-            temp = currentObject;
-            currentObject = [];
-            currentObject.push(temp);
-        }
-
-        currentObject = currentObject.map(function(item, i) {
-            if (item.Plot) {
-                const detailUrl = `#detail/${item.imdbID}`;
-
-                return (
-                    <div className="col s4" key={i}>
-                        <div className="card small">
-                            <div className="card-image">
-                                <img className="activator" src={item.Poster === "N/A" ? "" : item.Poster} alt=""/>
-                                <span className=""></span>
-                            </div>
-                            <div className="card-content">
-                                <a href={detailUrl}><strong>{item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong></a>
-                                <p>{item.Plot.substring(0,40)}</p>
-                            </div>
-                            <div className="card-reveal">
-                                <span className="card-title grey-text text-darken-4">{item.Title}<i className="fa fa-times right"></i></span>
-                                <p>{item.Plot}</p>
-                            </div>
+            return (
+                <div className="col s4" key={i}>
+                    <div className="card small">
+                        <div className="card-image">
+                            <img className="activator" src={item.Poster === "N/A" ? "" : item.Poster} alt=""/>
+                            <span className=""></span>
+                        </div>
+                        <div className="card-content">
+                            <a href={detailUrl}><strong>{item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong></a>
+                            <p>{item.Plot.substring(0,40)}</p>
+                        </div>
+                        <div className="card-reveal">
+                            <span className="card-title grey-text text-darken-4">{item.Title}<i className="fa fa-times right"></i></span>
+                            <p>{item.Plot}</p>
                         </div>
                     </div>
-                );
-            }
-        });
+                </div>
+            );
+        }
+    }
 
-        this.setState({componentTemplate: currentObject});
+    showTemplEmptyWatchlist() {
+        return (
+            <div>
+                <div>
+                    <strong>
+                        <i className="fa fa-exclamation-circle"></i> Your watchlist is empty.
+                    </strong>
+                </div>
+                <div className="section">
+                    Would you like to <a href="#userlist"><em>add</em></a> some entries?
+                </div>
+            </div>
+        );
     }
 }
 
