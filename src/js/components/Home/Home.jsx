@@ -39,22 +39,21 @@ class Home extends React.Component {
         } else {
             return (
                 <div className="row home">
-                    { this.state.renderData.map(this.showTemplCards) }
+                    { this.state.renderData.map(this.showTemplCards.bind(this)) }
                 </div>
             );
         }
     }
 
     fetchEpisodeData() {
-        const entryData = this.entryData;
         let finalData = [];
 
-        show.getMultipleEpisodes(entryData).then((result) => {
+        show.getMultipleEpisodes(this.entryData).then((result) => {
             result.forEach((key, index) => {
                 const currentItem = result[index].data;
 
                 if (typeof finalData !== "undefined")
-                    finalData = _.concat(currentItem, finalData);
+                    finalData = _.concat(finalData, currentItem);
                 else {
                     finalData.push(currentItem);
                 }
@@ -69,7 +68,8 @@ class Home extends React.Component {
 
     showTemplCards(item, i) {
         if (item.Plot) {
-            const detailUrl = `#detail/${item.imdbID}`;
+            const showName = this.entryData[i].name;
+            const detailUrl = `#detail/${item.imdbID}/${showName}`;
 
             return (
                 <div className="col s4" key={i}>
@@ -79,7 +79,7 @@ class Home extends React.Component {
                             <span className=""></span>
                         </div>
                         <div className="card-content">
-                            <a href={detailUrl}><strong>{item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong></a>
+                            <a href={detailUrl}><strong>{showName} | {item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong></a>
                             <p>{item.Plot.substring(0,40)}</p>
                         </div>
                         <div className="card-reveal">

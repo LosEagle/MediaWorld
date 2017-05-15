@@ -32,7 +32,7 @@ class AppRouter extends React.Component {
                 <Route path={"/userlist"} component={UserList} />
                 <Route path={"/userlistmanager"} component={UserListManager} />
                 <Route path={"/calendar"} component={Calendar} />
-                <Route path={"/detail/:info"} component={Detail} />
+                <Route path={"/detail/:info/:showName"} component={Detail} />
                 <Route path={"/importExport"} component={ImportExport} />
                 <Route path={"*"} component={Home} />
             </Router>
