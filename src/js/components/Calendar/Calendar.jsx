@@ -39,16 +39,24 @@ class Calendar extends React.Component {
         let currentJSON = io.read(global.userItems);
 
         for (let item of currentJSON) {
-            show.getEpisode(item.name, item.season, item.episode).then((response) => {
-                const eventObj = {
-                    title: `${item.name} - ${response.data.Title} - S${response.data.Season}E${response.data.Episode}`,
-                    start: new Date(response.data.Released),
-                    end: new Date(response.data.Released),
-                    editable: false,
-                    allDay: true
-                };
+            let name = item.name;
 
-                $("#calendar").fullCalendar("renderEvent", eventObj, true);
+            show.getSeason(item.name, item.season).then((response) => {
+                const data = response.data.Episodes;
+
+                for (let i = 0; i <= data.length - 1; i++) {
+                    let ep = data[i];
+
+                    const eventObj = {
+                        title: `${item.name} - S${item.season}E${ep.Episode}`,
+                        start: new Date(ep.Released),
+                        end: new Date(ep.Released),
+                        editable: false,
+                        allDay: true
+                    };
+
+                    $("#calendar").fullCalendar("renderEvent", eventObj, true);
+                }
             });
         }
     }

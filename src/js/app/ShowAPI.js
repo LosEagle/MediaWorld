@@ -11,6 +11,10 @@ export default class ShowAPI {
         return `${this.queryUrl}${name}&Season=${season}&Episode=${episode}`;
     }
 
+    generateSeasonUrl(name, season) {
+        return `${this.queryUrl}${name}&Season=${season}`;
+    }
+
     generateImdbEpisodeUrl(imdbId) {
         return `${this.imdbQueryUrl}${imdbId}`;
     }
@@ -27,6 +31,10 @@ export default class ShowAPI {
 
     getEpisode(name, season, episode) {
         return axios.get(this.generateEpisodeUrl(name, season, episode));
+    }
+
+    getSeason(name, season) {
+        return axios.get(this.generateSeasonUrl(name, season));
     }
 
     getEpisodeByImdb(imdbId) {
