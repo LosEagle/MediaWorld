@@ -31,7 +31,8 @@ class Calendar extends React.Component {
                 left: "prev, next today",
                 center: "title",
                 right: "listMonth, month, basicWeek, basicDay"
-            }
+            },
+            firstDay: 1
         });
     }
 

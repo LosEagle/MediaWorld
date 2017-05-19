@@ -4,8 +4,8 @@ import { Router, Route, Link, hashHistory } from "react-router";
 import "jquery";
 import "materialize-css";
 import "materialize-css/sass/materialize.scss";
-import "../css/main.sass";
 import "font-awesome/scss/font-awesome.scss";
+import "../css/main.sass";
 
 import Home from "./components/Home/Home.jsx";
 import UserList from "./components/UserList/UserList.jsx";

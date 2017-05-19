@@ -2,7 +2,6 @@ import React from "react";
 import * as global from "../../app/global";
 import IO from "../../app/IO";
 import ShowAPI from "../../app/ShowAPI";
-import "./home.sass";
 
 const io = new IO;
 const show = new ShowAPI;
@@ -83,7 +82,7 @@ class Home extends React.Component {
                             <p>{item.Plot.substring(0,40)}</p>
                         </div>
                         <div className="card-reveal">
-                            <span className="card-title grey-text text-darken-4">{item.Title}<i className="fa fa-times right"></i></span>
+                            <span className="card-title">{item.Title}<i className="fa fa-times right"></i></span>
                             <p>{item.Plot}</p>
                         </div>
                     </div>

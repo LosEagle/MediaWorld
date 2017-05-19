@@ -7,7 +7,7 @@ class Sidebar extends React.Component {
 
     render() {
         return (
-            <ul className="side-nav fixed grey darken-3">
+            <ul className="side-nav fixed">
                 <li><a className="waves-effect white-text text-darken-1" href="#">MediaWorld <sup>WORK IN PROGRESS</sup></a></li>
                 <li><a className="waves-effect white-text text-darken-1" href="#"><i className="white-text text-darken-1 fa fa-home"></i> Home</a></li>
                 <li><a className="waves-effect white-text text-darken-1" href="#calendar"><i className="white-text text-darken-1 fa fa-calendar"></i> Calendar</a></li>

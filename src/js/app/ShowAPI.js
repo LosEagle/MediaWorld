@@ -1,5 +1,4 @@
 import * as axios from "axios";
-import * as _ from "lodash";
 
 export default class ShowAPI {
     constructor() {
