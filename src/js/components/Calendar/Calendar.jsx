@@ -45,6 +45,8 @@ class Calendar extends React.Component {
             show.getSeason(item.name, item.season).then((response) => {
                 const data = response.data.Episodes;
 
+                if (!data) return;
+
                 for (let i = 0; i <= data.length - 1; i++) {
                     let ep = data[i];
 
