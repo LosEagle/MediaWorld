@@ -1,0 +1,62 @@
+.collection
+    border-color: #37474f
+    border-radius: 0
+    
+    .collection-item
+        background-color: #37474f
+        border-color: #9E9E9E
+        transition: all .2s ease
+
+        &:hover
+            color: #FFF
+
+.card
+    background-color: #37474f
+
+    .card-reveal
+        background-color: #37474f
+
+    .card-image
+        > img
+            transition: all .5s ease
+
+        &:hover
+            > img
+                transform: scale(1.25)
+
+    .card-content
+        a, p
+            transition: all .5s ease
+
+    &:hover
+        .card-content
+            a, p
+                color: #FFF
+
+    .card-image
+        img
+            cursor: pointer
+
+blockquote
+    color: #FFF
+    border-left-color: #00695c
+    
+table.highlight
+    > thead
+        > tr
+            > th
+                color: #FFF
+    > tbody
+        > tr
+            transition: all .2s ease
+
+        > tr:hover
+            background-color: #37474F
+            color: #FFF
+            
+            > td
+                border-radius: 0
+
+form
+    input
+        color: #FFF
