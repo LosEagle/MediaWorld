@@ -2,20 +2,20 @@ import React from "react";
 import "./userListManager.sass";
 import * as global from "../../app/global";
 import IO from "../../app/IO";
-import ShowAPI from "../../app/ShowAPI";
+import TVMazeAPI from "../../app/TVMazeAPI";
 
 const io = new IO;
-const show = new ShowAPI;
+const tvm = new TVMazeAPI;
 
 class UserListManager extends React.Component {
     constructor() {
         super();
 
-        this.releaseDates = [];
         this.entryData = [];
         this.state = {
             collection: []
         };
+        this.LABEL_DATE_NOT_AVAILABLE = "Unavailable";
     }
 
     componentWillMount() {
@@ -23,7 +23,7 @@ class UserListManager extends React.Component {
     }
 
     componentDidMount() {
-        this.renderWithDates();
+        this.handleDates();
         this.prepareTemplate();
     }
 
@@ -64,12 +64,13 @@ class UserListManager extends React.Component {
         if (currentCollection === "") return;
 
         currentCollection = currentCollection.map((item, i) => {
+            if (!item.airdate) item.airdate = this.LABEL_DATE_NOT_AVAILABLE;
             return (
                 <tr key={i}>
                     <td><strong>{item.name}</strong></td>
                     <td>{item.season}</td>
                     <td>{item.episode}</td>
-                    <td>{this.releaseDates[i]}</td>
+                    <td>{item.airdate}</td>
                     <td className="iconContainer">
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
@@ -118,7 +119,7 @@ class UserListManager extends React.Component {
 
         io.changeEntry(global.userItems, index, entry);
 
-        this.renderWithDates(index);
+        this.handleDates(index);
     }
 
     handleEpisodeInteraction(e) {
@@ -144,37 +145,46 @@ class UserListManager extends React.Component {
 
         io.changeEntry(global.userItems, index, entry);
 
-        this.renderWithDates(index);
+        this.handleDates(index);
     }
 
-    renderWithDates(entry) {
-        const entryData = this.entryData;
-        let temp = [];
-
+    handleDates(entry) {
         if (!entry) {
-            show.getMultipleEpisodes(entryData).then((result) => {
-                result.forEach((key, index) => {
-                    if (result[index].data.Error)
-                        temp.push(result[index].data.Error);
-                    else
-                        temp.push(result[index].data.Released);
-                });
+            tvm.searchForShows(this.entryData).then((response) => {
+                for (let i = 0; i <= response.length - 1; i++) {
+                    this.entryData[i].id = (response[i].data.id);
+                }
+            }).then(() => {
+                let temp = 0;
 
-                this.releaseDates = temp;
-                this.prepareTemplate();
+                for (let i = 0; i <= this.entryData.length - 1; i++) {
+                    tvm.getEpisode(this.entryData[i].id, this.entryData[i].season, this.entryData[i].episode).then((response) => {
+                        temp = response.data.airdate;
+                    }).then(() => {
+                        this.entryData[i].airdate = temp;
+
+                        if (i === this.entryData.length - 1)
+                            this.prepareTemplate();
+                    }).catch((err) => {
+                        if (i === this.entryData.length - 1)
+                            this.prepareTemplate();
+                    });
+                }
             });
         } else {
-            let prevReleaseDates = this.releaseDates;
-            temp = prevReleaseDates;
+            let showID = 0;
 
-            show.getEpisode(entryData[entry].name, entryData[entry].season, entryData[entry].episode).then((result) => {
-                if (result.data.Error)
-                    temp[entry] = result.data.Error;
-                else
-                    temp[entry] = result.data.Released;
-
-                this.releaseDates = temp;
-                this.prepareTemplate();
+            tvm.getSingleShowByName(this.entryData[entry].name).then((response) => {
+                showID = response.data.id;
+            }).then(() => {
+                tvm.getEpisode(showID, this.entryData[entry].season, this.entryData[entry].episode).then((response) => {
+                    this.entryData[entry].airdate = response.data.airdate;
+                }).then(() => {
+                    this.prepareTemplate();
+                }).catch(() => {
+                    delete this.entryData[entry].airdate;
+                    this.prepareTemplate();
+                });
             });
         }
     }

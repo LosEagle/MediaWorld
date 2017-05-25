@@ -1,10 +1,10 @@
 import React from "react";
 import "./detail.sass";
-import ShowAPI from "../../app/ShowAPI";
 import YoutubeAPI from "../../app/YoutubeAPI";
+import TVMazeAPI from "../../app/TVMazeAPI";
 
-const show = new ShowAPI;
 const yt = new YoutubeAPI;
+const tvm = new TVMazeAPI;
 
 class Detail extends React.Component {
     constructor() {
@@ -37,29 +37,29 @@ class Detail extends React.Component {
     }
 
     constructContent() {
-        show.getEpisodeByImdb(this.props.params.info).then((response) => {
+        tvm.getEpisodeByID(this.props.params.id).then((response) => {
             let data = response.data;
             this.epInfo = data;
             let infoMarkup;
 
             infoMarkup =
-            Object.keys(data).map((key, index) => {
-                if (typeof data[key] !== "object") {
-                    return (
-                        <li className="collection-item" key={index}>
-                            <span>{key}: </span>
-                            <span>{data[key]}</span>
-                        </li>
-                    );
-                } else {
-                    return (
-                        <li className="collection-item" key={index}>
-                            <span>{key}: </span>
-                            <span>{JSON.stringify(data[key])}</span>
-                        </li>
-                    );
-                }
-            });
+                Object.keys(data).map((key, index) => {
+                    if (typeof data[key] !== "object") {
+                        return (
+                            <li className="collection-item" key={index}>
+                                <span>{key}: </span>
+                                <span>{data[key]}</span>
+                            </li>
+                        );
+                    } else {
+                        return (
+                            <li className="collection-item" key={index}>
+                                <span>{key}: </span>
+                                <span>{JSON.stringify(data[key])}</span>
+                            </li>
+                        );
+                    }
+                });
 
             this.setState({
                 template: infoMarkup
@@ -70,10 +70,15 @@ class Detail extends React.Component {
     }
 
     sendYoutubeRequest() {
-        const query = `${this.props.params.showName} s${this.epInfo.Season}e${this.epInfo.Episode} trailer`;
+        const query = `${this.props.params.showName} s${this.epInfo.season}e${this.epInfo.number} trailer`;
 
         yt.search(query).then((response) => {
             const data = response.data.items[0];
+
+            if (!data) {
+                Materialize.toast("YouTube trailer not found", 1000);
+                return;
+            }
 
             this.setState({
                 embed:
