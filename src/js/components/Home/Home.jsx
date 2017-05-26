@@ -3,10 +3,12 @@ import * as global from "../../app/global";
 import IO from "../../app/IO";
 import TVMazeAPI from "../../app/TVMazeAPI";
 import Helper from "../../app/Helper";
+import Settings from "../../app/Settings";
 
 const io = new IO;
 const tvm = new TVMazeAPI;
 const h = new Helper;
+const settings = new Settings;
 
 class Home extends React.Component {
     constructor() {
@@ -66,8 +68,6 @@ class Home extends React.Component {
                         renderData: finalData,
                         allowTemplRender: true
                     });
-                }).catch((err) => {
-                    return;
                 });
             }
         });
@@ -77,6 +77,8 @@ class Home extends React.Component {
         const showName = item.showName;
         const detailUrl = `#detail/${item.id}/${showName}`;
 
+        if (!item.id) return;
+
         return (
             <div className="col s4" key={i}>
                 <div className="card small">
@@ -85,7 +87,7 @@ class Home extends React.Component {
                         <span className=""></span>
                     </div>
                     <div className="card-content">
-                        <a href={detailUrl}><strong>{showName} | {item.name} | S{item.season}E{item.number} | {item.airdate}</strong></a>
+                        <a href={detailUrl}><strong>{showName} | {item.name} | S{item.season}E{item.number} | {settings.formatDate(item.airstamp)}</strong></a>
                         <p className="truncate">{h.stripParagraphs(item.summary)}</p>
                     </div>
                     <div className="card-reveal">

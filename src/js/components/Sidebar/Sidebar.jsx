@@ -14,6 +14,7 @@ class Sidebar extends React.Component {
                 <li><a className="waves-effect white-text text-darken-1" href="#userlist"><i className="white-text text-darken-1 fa fa-plus"></i> Add</a></li>
                 <li><a className="waves-effect white-text text-darken-1" href="#userlistManager"><i className="white-text text-darken-1 fa fa-table"></i> Manage</a></li>
                 <li><a className="waves-effect white-text text-darken-1" href="#importExport"><i className="white-text text-darken-1 fa fa-download"></i> Import/export</a></li>
+                <li><a className="waves-effect white-text text-darken-1" href="#settings"><i className="white-text text-darken-1 fa fa-cog"></i> Settings</a></li>
             </ul>
         );
     }

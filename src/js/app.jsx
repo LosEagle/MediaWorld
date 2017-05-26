@@ -15,6 +15,7 @@ import Sidebar from "./components/Sidebar/Sidebar.jsx";
 import Preloader from "./components/Preloader/Preloader.jsx";
 import Detail from "./components/Detail/Detail.jsx";
 import ImportExport from "./components/ImportExport/ImportExport.jsx";
+import Settings from "./components/Settings/Settings.jsx";
 
 const app = document.getElementById("app");
 const sidebar = document.getElementById("sidebar");
@@ -34,6 +35,7 @@ class AppRouter extends React.Component {
                 <Route path={"/calendar"} component={Calendar} />
                 <Route path={"/detail/:id/:showName"} component={Detail} />
                 <Route path={"/importExport"} component={ImportExport} />
+                <Route path={"/settings"} component={Settings} />
                 <Route path={"*"} component={Home} />
             </Router>
         );

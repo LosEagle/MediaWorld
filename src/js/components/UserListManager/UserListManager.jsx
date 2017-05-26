@@ -3,9 +3,11 @@ import "./userListManager.sass";
 import * as global from "../../app/global";
 import IO from "../../app/IO";
 import TVMazeAPI from "../../app/TVMazeAPI";
+import Settings from "../../app/Settings";
 
 const io = new IO;
 const tvm = new TVMazeAPI;
+const settings = new Settings;
 
 class UserListManager extends React.Component {
     constructor() {
@@ -15,7 +17,7 @@ class UserListManager extends React.Component {
         this.state = {
             collection: []
         };
-        this.LABEL_DATE_NOT_AVAILABLE = "Unavailable";
+        this.LABEL_DATESTAMP_NOT_AVAILABLE = "Unavailable";
     }
 
     componentWillMount() {
@@ -64,13 +66,17 @@ class UserListManager extends React.Component {
         if (currentCollection === "") return;
 
         currentCollection = currentCollection.map((item, i) => {
-            if (!item.airdate) item.airdate = this.LABEL_DATE_NOT_AVAILABLE;
+            let stamp;
+
+            if (!item.airstamp || item.airstamp === "Not found") stamp = this.LABEL_DATESTAMP_NOT_AVAILABLE;
+            else stamp = settings.formatDate(new Date(item.airstamp)).toString();
+
             return (
                 <tr key={i}>
                     <td><strong>{item.name}</strong></td>
                     <td>{item.season}</td>
                     <td>{item.episode}</td>
-                    <td>{item.airdate}</td>
+                    <td>{stamp}</td>
                     <td className="iconContainer">
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
@@ -159,9 +165,10 @@ class UserListManager extends React.Component {
 
                 for (let i = 0; i <= this.entryData.length - 1; i++) {
                     tvm.getEpisode(this.entryData[i].id, this.entryData[i].season, this.entryData[i].episode).then((response) => {
-                        temp = response.data.airdate;
+                        temp = response.data.airstamp;
                     }).then(() => {
-                        this.entryData[i].airdate = temp;
+                        if (temp)
+                            this.entryData[i].airstamp = temp;
 
                         if (i === this.entryData.length - 1)
                             this.prepareTemplate();
@@ -178,11 +185,11 @@ class UserListManager extends React.Component {
                 showID = response.data.id;
             }).then(() => {
                 tvm.getEpisode(showID, this.entryData[entry].season, this.entryData[entry].episode).then((response) => {
-                    this.entryData[entry].airdate = response.data.airdate;
+                    this.entryData[entry].airstamp = response.data.airstamp;
                 }).then(() => {
                     this.prepareTemplate();
                 }).catch(() => {
-                    delete this.entryData[entry].airdate;
+                    delete this.entryData[entry].airstamp;
                     this.prepareTemplate();
                 });
             });

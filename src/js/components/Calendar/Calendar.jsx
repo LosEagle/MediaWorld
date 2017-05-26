@@ -6,9 +6,11 @@ import * as global from "../../app/global";
 import IO from "../../app/IO";
 import TVMazeAPI from "../../app/TVMazeAPI";
 import * as _ from "lodash";
+import Settings from "../../app/Settings";
 
 const io = new IO;
 const tvm = new TVMazeAPI;
+const settings = new Settings;
 
 class Calendar extends React.Component {
     constructor() {
@@ -33,7 +35,7 @@ class Calendar extends React.Component {
                 center: "title",
                 right: "listMonth, month, basicWeek, basicDay"
             },
-            firstDay: 1,
+            firstDay: settings.getCalendarFirstDay(),
             events: this.calendarEvents
         });
     }
@@ -51,19 +53,21 @@ class Calendar extends React.Component {
                 id = response.data.id;
             }).then(() => {
                 tvm.getEpisodesByID(id).then((response) => {
-                    const data = response.data;
-                    const episodes = _.filter(data, { "season": season });
+                    if (id) {
+                        const data = response.data;
+                        const episodes = _.filter(data, { "season": season });
 
-                    for (let ep of episodes) {
-                        const eventObj = {
-                            title: `${name} - S${ep.season}E${ep.number}`,
-                            start: new Date(ep.airdate),
-                            end: new Date(ep.airdate),
-                            editable: false,
-                            allDay: true
-                        };
+                        for (let ep of episodes) {
+                            const eventObj = {
+                                title: `${name} - S${ep.season}E${ep.number}`,
+                                start: new Date(ep.airstamp),
+                                end: new Date(ep.airstamp),
+                                editable: false,
+                                allDay: false
+                            };
 
-                        this.calendarEvents.push(eventObj);
+                            this.calendarEvents.push(eventObj);
+                        }
                     }
                 }).then(() => {
                     if (i === currentJSON.length -1)
