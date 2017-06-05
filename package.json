@@ -1,21 +1,21 @@
 {
   "name": "mediaworld",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "MediaWorld",
   "main": "main.js",
   "scripts": {
     "webpack": "webpack --watch",
+    "webpack:bundle": "webpack",
     "electron": "electron .",
-    "electron:dist": "/home/miloslavnosek/work/reactwebpack/node_modules/electron/dist/electron ~/work/reactwebpack/",
     "pack": "electron-packager . mediaworld --all",
     "pack:win64": "electron-packager . mediaworld --platform=win32 --arch=x64",
     "eslint": "eslint assets/js/ || true"
   },
-  "repository": "https://gitlab.com/nosek/MediaWorld",
+  "repository": "https://github.com/LosEagle/MediaWorld",
   "keywords": [
     "MediaWorld"
   ],
-  "author": "Eagle",
+  "author": "Miloslav Nosek",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.21.0",
