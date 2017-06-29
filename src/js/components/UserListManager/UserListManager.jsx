@@ -38,7 +38,8 @@ class UserListManager extends React.Component {
     }
 
     render() {
-        $(".tooltipped").tooltip();
+        if ($(".tooltippped").length > 0)
+            $(".tooltipped").tooltip();
 
         return (
             <div className="row userListManager">
