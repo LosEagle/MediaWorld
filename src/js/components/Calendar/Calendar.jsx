@@ -12,7 +12,7 @@ const io = new IO;
 const tvm = new TVMazeAPI;
 const settings = new Settings;
 
-class Calendar extends React.Component {
+export default class Calendar extends React.Component {
     constructor() {
         super();
         this.calendarEvents = [];
@@ -81,5 +81,3 @@ class Calendar extends React.Component {
         }
     }
 }
-
-module.exports = Calendar;

@@ -1,6 +1,6 @@
 import React from "react";
 
-class Sidebar extends React.Component {
+export default class Sidebar extends React.Component {
     constructor() {
         super();
     }
@@ -19,5 +19,3 @@ class Sidebar extends React.Component {
         );
     }
 }
-
-module.exports = Sidebar;

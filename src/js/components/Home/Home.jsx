@@ -10,7 +10,7 @@ const tvm = new TVMazeAPI;
 const h = new Helper;
 const settings = new Settings;
 
-class Home extends React.Component {
+export default class Home extends React.Component {
     constructor() {
         super();
 
@@ -114,5 +114,3 @@ class Home extends React.Component {
         );
     }
 }
-
-module.exports = Home;

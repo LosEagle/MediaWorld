@@ -5,7 +5,7 @@ import IO from "../../app/IO";
 
 const io = new IO;
 
-class UserList extends React.Component {
+export default class UserList extends React.Component {
     constructor() {
         super();
     }
@@ -60,5 +60,3 @@ class UserList extends React.Component {
         io.append(global.userItems, finalJson);
     }
 }
-
-module.exports = UserList;

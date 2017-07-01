@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Router, Route, Link, hashHistory } from "react-router";
+import {HashRouter, Route, Switch} from "react-router-dom";
 import "jquery";
 import "materialize-css";
-import "materialize-css/sass/materialize.scss";
+import "materialize-css/dist/css/materialize.min.css";
 import "font-awesome/scss/font-awesome.scss";
 import "../css/main.sass";
 
@@ -21,27 +21,29 @@ const app = document.getElementById("app");
 const sidebar = document.getElementById("sidebar");
 const progressbar = document.getElementById("progressbar");
 
-class AppRouter extends React.Component {
+export default class AppRouter extends React.Component {
     constructor() {
         super();
     }
 
     render() {
         return (
-            <Router history={hashHistory}>
-                <Route path={"/"} component={Home} />
-                <Route path={"/userlist"} component={UserList} />
-                <Route path={"/userlistmanager"} component={UserListManager} />
-                <Route path={"/calendar"} component={Calendar} />
-                <Route path={"/detail/:id/:showName"} component={Detail} />
-                <Route path={"/importExport"} component={ImportExport} />
-                <Route path={"/settings"} component={Settings} />
-                <Route path={"*"} component={Home} />
-            </Router>
+            <HashRouter>
+                <Switch>
+                    <Route exact path="/" component={Home}/>
+                    <Route path="/userList" component={UserList}/>
+                    <Route path="/userListManager" component={UserListManager}/>
+                    <Route path="/calendar" component={Calendar}/>
+                    <Route path="/detail/:id/:showName" component={Detail}/>
+                    <Route path="/importExport" component={ImportExport}/>
+                    <Route path="/settings" component={Settings}/>
+                    <Route component={Home}/>
+                </Switch>
+            </HashRouter>
         );
     }
 }
 
 ReactDOM.render(<AppRouter />, app);
 ReactDOM.render(<Sidebar />, sidebar);
-ReactDOM.render(<Preloader visibility="hidden" />, progressbar);
+ReactDOM.render(<Preloader visibility="hidden"/>, progressbar);

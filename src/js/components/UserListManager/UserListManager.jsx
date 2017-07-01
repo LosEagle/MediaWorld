@@ -9,7 +9,7 @@ const io = new IO;
 const tvm = new TVMazeAPI;
 const settings = new Settings;
 
-class UserListManager extends React.Component {
+export default class UserListManager extends React.Component {
     constructor() {
         super();
 
@@ -197,5 +197,3 @@ class UserListManager extends React.Component {
         }
     }
 }
-
-module.exports = UserListManager;

@@ -6,7 +6,7 @@ import TVMazeAPI from "../../app/TVMazeAPI";
 const yt = new YoutubeAPI;
 const tvm = new TVMazeAPI;
 
-class Detail extends React.Component {
+export default class Detail extends React.Component {
     constructor() {
         super();
 
@@ -37,7 +37,7 @@ class Detail extends React.Component {
     }
 
     constructContent() {
-        tvm.getEpisodeByID(this.props.params.id).then((response) => {
+        tvm.getEpisodeByID(this.props.match.params.id).then((response) => {
             let data = response.data;
             this.epInfo = data;
             let infoMarkup;
@@ -70,7 +70,7 @@ class Detail extends React.Component {
     }
 
     sendYoutubeRequest() {
-        const query = `${this.props.params.showName} s${this.epInfo.season}e${this.epInfo.number} trailer`;
+        const query = `${this.props.match.params.showName} s${this.epInfo.season}e${this.epInfo.number} trailer`;
 
         yt.search(query).then((response) => {
             const data = response.data.items[0];
@@ -81,13 +81,8 @@ class Detail extends React.Component {
             }
 
             this.setState({
-                embed:
-                    <iframe type="text/html" height="360"
-                    src={`https://www.youtube.com/embed/${data.id.videoId}`}
-                    frameBorder="0"></iframe>
+                embed: <iframe type="text/html" height="360" src={`https://www.youtube.com/embed/${data.id.videoId}`} frameBorder="0"></iframe>
             });
         });
     }
 }
-
-module.exports = Detail;

@@ -5,7 +5,7 @@ import moment from "moment-timezone";
 
 const io = new IO;
 
-class Settings extends React.Component {
+export default class Settings extends React.Component {
     render() {
         return (
             <div className="row">
@@ -82,5 +82,3 @@ class Settings extends React.Component {
         io.write(global.settings, list);
     }
 }
-
-module.exports = Settings;
