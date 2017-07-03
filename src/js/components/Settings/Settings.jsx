@@ -85,6 +85,7 @@ export default class Settings extends React.Component {
         }
 
         io.write(global.settings, list);
+        Materialize.toast("Saved. Some settings might need restart.", 4000);
     }
 
     setFormInitialValues() {
