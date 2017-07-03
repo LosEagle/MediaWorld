@@ -6,6 +6,11 @@ import moment from "moment-timezone";
 const io = new IO;
 
 export default class Settings extends React.Component {
+    componentDidMount() {
+        this.setFormInitialValues();
+        $("select").material_select();
+    }
+
     render() {
         return (
             <div className="row">
@@ -14,7 +19,7 @@ export default class Settings extends React.Component {
                         <h1>Date</h1>
                         <h2>Format</h2>
                         <div className="input-field">
-                            <select className="browser-default" ref="dateFormat">
+                            <select ref="dateFormat">
                                 <option>DD.MM.YYYY hh:mm</option>
                                 <option>MM.DD.YYYY hh:mm</option>
                                 <option>YYYY.MM.DD hh:mm</option>
@@ -30,7 +35,7 @@ export default class Settings extends React.Component {
                         <h2>Timezone</h2>
 
                         <div className="input-field">
-                            <select className="browser-default" ref="timezone">
+                            <select ref="timezone">
                                 {moment.tz.names().map(this.fillTimezoneOptions)}
                             </select>
                         </div>
@@ -40,7 +45,7 @@ export default class Settings extends React.Component {
                         <h2>First day of week</h2>
                         <span>0 = SU, 1 = MO, 2 = TU etc.</span>
                         <div className="input-field">
-                            <select className="browser-default" ref="calendarFirstDay">
+                            <select ref="calendarFirstDay">
                                 <option>0</option>
                                 <option>1</option>
                                 <option>2</option>
@@ -74,11 +79,19 @@ export default class Settings extends React.Component {
         for (let item in this.refs) {
             let refVal = this.refs[item].value;
 
-            if ( (!list[item] || list[item] !== refVal) && refVal !== "" ) {
+            if ((!list[item] || list[item] !== refVal) && refVal !== "") {
                 list[item] = refVal;
             }
         }
 
         io.write(global.settings, list);
+    }
+
+    setFormInitialValues() {
+        const contents = io.read(global.settings);
+
+        this.refs.dateFormat.value = contents.dateFormat;
+        this.refs.timezone.value = contents.timezone;
+        this.refs.calendarFirstDay.value = contents.calendarFirstDay;
     }
 }
