@@ -26,8 +26,8 @@
     "css-loader": "^0.28.4",
     "electron": "^1.6.2",
     "electron-packager": "^8.7.2",
-    "eslint": "^4.1.1",
-    "eslint-loader": "^1.7.1",
+    "eslint": "^4.2.0",
+    "eslint-loader": "^1.9.0",
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
     "fullcalendar": "^3.2.0",
@@ -39,10 +39,10 @@
     "node-sass": "^4.5.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-router-dom": "^4.1.1",
+    "react-router-dom": "^4.1.2",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
-    "webpack": "^3.0.0"
+    "webpack": "^3.3.0"
   }
 }
