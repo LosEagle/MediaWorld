@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import * as global from "./app/global";
 import {HashRouter, Route, Switch} from "react-router-dom";
 import "jquery";
 import "materialize-css";
 import "materialize-css/dist/css/materialize.min.css";
 import "font-awesome/scss/font-awesome.scss";
 import "../css/main.sass";
+import IO from "./app/IO";
 
 import Home from "./components/Home/Home.jsx";
 import UserList from "./components/UserList/UserList.jsx";
@@ -20,10 +22,11 @@ import Settings from "./components/Settings/Settings.jsx";
 const app = document.getElementById("app");
 const sidebar = document.getElementById("sidebar");
 const progressbar = document.getElementById("progressbar");
+const io = new IO;
 
 export default class AppRouter extends React.Component {
-    constructor() {
-        super();
+    componentWillMount() {
+        io.createFileIfNotExists(global.userItems);
     }
 
     render() {

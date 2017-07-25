@@ -21,10 +21,6 @@ export default class Home extends React.Component {
         };
     }
 
-    componentWillMount() {
-        io.createFileIfNotExists(global.userItems);
-    }
-
     componentDidMount() {
         this.entryData = io.read(global.userItems);
         this.getEpisodeData();
