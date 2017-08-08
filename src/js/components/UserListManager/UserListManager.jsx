@@ -30,11 +30,8 @@ export default class UserListManager extends React.Component {
     }
 
     componentWillUnmount() {
-        let tooltips = document.querySelectorAll(".material-tooltip");
-
-        for (let tooltip of tooltips) {
-            tooltip.remove();
-        }
+        this.clearTooltips();
+        this.saveChanges();
     }
 
     render() {
@@ -61,6 +58,14 @@ export default class UserListManager extends React.Component {
         );
     }
 
+    clearTooltips() {
+        const tooltips = document.querySelectorAll(".material-tooltip");
+
+        for (let tooltip of tooltips) {
+            tooltip.remove();
+        }
+    }
+
     prepareTemplate() {
         let currentCollection = this.entryData;
 
@@ -79,11 +84,21 @@ export default class UserListManager extends React.Component {
                     <td>{item.episode}</td>
                     <td>{stamp}</td>
                     <td className="iconContainer">
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season"><i onClick={this.handleSeasonInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment episode"><i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i></a>
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement episode"><i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i></a>
-                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Remove entry"><i onClick={this.handleItemRemove.bind(this)} data-entry={i} className="fa fa-times"></i></a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season">
+                            <i onClick={this.handleSeasonInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i>
+                        </a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season">
+                            <i onClick={this.handleSeasonInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i>
+                        </a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment episode">
+                            <i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i>
+                        </a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement episode">
+                            <i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i>
+                        </a>
+                        <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Remove entry">
+                            <i onClick={this.handleItemRemove.bind(this)} data-entry={i} className="fa fa-times"></i>
+                        </a>
                     </td>
                 </tr>
             );
@@ -98,7 +113,7 @@ export default class UserListManager extends React.Component {
         let currentCollection = this.state.collection;
         let index = e.target.getAttribute("data-entry");
 
-        io.removeEntry(global.userItems, index);
+        this.entryData.splice(index, 1);
         currentCollection.splice(index, 1);
 
         this.setState({collection: currentCollection});
@@ -107,12 +122,9 @@ export default class UserListManager extends React.Component {
     handleSeasonInteraction(e) {
         e.preventDefault();
 
+        const index = e.target.getAttribute("data-entry");
         const mode = e.target.getAttribute("data-mode");
-
-        let index = e.target.getAttribute("data-entry");
-        const entryData = this.entryData;
-        let entry = entryData[index];
-        let season = parseInt(entry.season);
+        let season = parseInt(this.entryData[index].season);
 
         if (mode === "increment")
             season += 1;
@@ -122,24 +134,16 @@ export default class UserListManager extends React.Component {
             throw "data-mode not set in interaction";
 
         season = season.toString();
-        entry.season = season;
-
-        io.changeEntry(global.userItems, index, entry);
+        this.entryData[index].season = season;
 
         this.handleDates(index);
     }
 
     handleEpisodeInteraction(e) {
         e.preventDefault();
-
+        const index = e.target.getAttribute("data-entry");
         const mode = e.target.getAttribute("data-mode");
-
-        let index = e.target.getAttribute("data-entry");
-        const entryData = this.entryData;
-        let entry = entryData[index];
-        let episode;
-
-        episode = parseInt(entry.episode);
+        let episode = parseInt(this.entryData[index].episode);
 
         if (mode === "increment")
             episode += 1;
@@ -148,9 +152,7 @@ export default class UserListManager extends React.Component {
         else
             throw "data-mode not set in interaction";
 
-        entry.episode = episode.toString();
-
-        io.changeEntry(global.userItems, index, entry);
+        this.entryData[index].episode = episode.toString();
 
         this.handleDates(index);
     }
@@ -195,5 +197,9 @@ export default class UserListManager extends React.Component {
                 });
             });
         }
+    }
+
+    saveChanges() {
+        io.write(global.userItems, this.entryData);
     }
 }
