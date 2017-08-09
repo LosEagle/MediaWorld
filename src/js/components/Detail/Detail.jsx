@@ -45,19 +45,44 @@ export default class Detail extends React.Component {
             infoMarkup =
                 Object.keys(data).map((key, index) => {
                     if (typeof data[key] !== "object") {
-                        return (
-                            <li className="collection-item" key={index}>
-                                <span>{key}: </span>
-                                <span>{data[key]}</span>
-                            </li>
-                        );
+                        if (key === "summary") {
+                            data[key] = data[key].replace(/<\/?[^>]+(>|$)/g, "");
+                            return (
+                                <li className="collection-item" key={index}>
+                                    <span>{key}: </span>
+                                    <span>{data[key]}</span>
+                                </li>
+                            );
+                        } else {
+                            return (
+                                <li className="collection-item" key={index}>
+                                    <span>{key}: </span>
+                                    <span>{data[key]}</span>
+                                </li>
+                            );
+                        }
                     } else {
-                        return (
-                            <li className="collection-item" key={index}>
-                                <span>{key}: </span>
-                                <span>{JSON.stringify(data[key])}</span>
-                            </li>
-                        );
+                        if (key === "image")
+                            return (
+                                <li className="collection-item" key={index}>
+                                    <span>{key}: </span>
+                                    <span>{data[key].medium}</span>
+                                </li>
+                            );
+                        else if (key === "_links")
+                            return (
+                                <li className="collection-item" key={index}>
+                                    <span>{key}: </span>
+                                    <span>{data[key].self.href}</span>
+                                </li>
+                            );
+                        else
+                            return (
+                                <li className="collection-item" key={index}>
+                                    <span>{key}: </span>
+                                    <span>{JSON.stringify(data[key])}</span>
+                                </li>
+                            );
                     }
                 });
 
