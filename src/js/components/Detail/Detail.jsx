@@ -27,7 +27,7 @@ export default class Detail extends React.Component {
                         <p>Season {this.state.episodeInfo.season} Episode {this.state.episodeInfo.number}</p>
                         <p>Release: {settings.formatDate(this.state.episodeInfo.airstamp)}</p>
                         <p>Length: {this.state.episodeInfo.runtime}</p>
-                        <p ref="summary"></p>
+                        {this.state.episodeInfo.summary}
                     </div>
                 </div>
             </div>
@@ -41,8 +41,6 @@ export default class Detail extends React.Component {
     constructContent() {
         tvm.getEpisodeByID(this.props.match.params.id).then((response) => {
             const data = response.data;
-
-            this.refs.summary.innerHTML = data.summary;
 
             this.setState({
                 episodeInfo: data
