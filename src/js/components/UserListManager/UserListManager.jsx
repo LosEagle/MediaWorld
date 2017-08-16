@@ -175,7 +175,7 @@ export default class UserListManager extends React.Component {
 
                         if (i === this.entryData.length - 1)
                             this.prepareTemplate();
-                    }).catch((err) => {
+                    }).catch(() => {
                         if (i === this.entryData.length - 1)
                             this.prepareTemplate();
                     });
