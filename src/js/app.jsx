@@ -18,6 +18,7 @@ import Preloader from "./components/Preloader/Preloader.jsx";
 import Detail from "./components/Detail/Detail.jsx";
 import ImportExport from "./components/ImportExport/ImportExport.jsx";
 import Settings from "./components/Settings/Settings.jsx";
+import ManagerHelper from "./components/UserListManager/ManagerContainer/ManagerContainer.jsx";
 
 const app = document.getElementById("app");
 const sidebar = document.getElementById("sidebar");
@@ -35,7 +36,7 @@ export default class AppRouter extends React.Component {
                 <Switch>
                     <Route exact path="/" component={Home}/>
                     <Route path="/userList" component={UserList}/>
-                    <Route path="/userListManager" component={UserListManager}/>
+                    <Route path="/userListManager" component={ManagerHelper}/>
                     <Route path="/calendar" component={Calendar}/>
                     <Route path="/detail/:id/:showName" component={Detail}/>
                     <Route path="/importExport" component={ImportExport}/>

@@ -14,9 +14,6 @@ export default class UserListManager extends React.Component {
         super();
 
         this.entryData = [];
-        this.state = {
-            collection: []
-        };
         this.LABEL_DATESTAMP_NOT_AVAILABLE = "Unavailable";
     }
 
@@ -51,7 +48,7 @@ export default class UserListManager extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.collection}
+                        {this.props.getShowItems()}
                     </tbody>
                 </table>
             </div>
@@ -67,56 +64,60 @@ export default class UserListManager extends React.Component {
     }
 
     prepareTemplate() {
-        let currentCollection = this.entryData;
+        let items = this.entryData;
 
-        if (currentCollection === "") return;
+        if (items === "") return;
 
-        currentCollection = currentCollection.map((item, i) => {
+        items = items.map((item, i) => {
             let stamp;
+            const hidden = this.props.getHiddenItems();
+            let style = {};
 
             if (!item.airstamp || item.airstamp === "Not found") stamp = this.LABEL_DATESTAMP_NOT_AVAILABLE;
             else stamp = settings.formatDate(new Date(item.airstamp)).toString();
 
+            if (hidden.indexOf(i) !== -1) style = { display: "none" };
+
             return (
-                <tr key={i}>
+                <tr key={i} style={style}>
                     <td><strong>{item.name}</strong></td>
                     <td>{item.season}</td>
                     <td>{item.episode}</td>
                     <td>{stamp}</td>
                     <td className="iconContainer">
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment season">
-                            <i onClick={this.handleSeasonInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i>
+                            <i onClick={this.handleSeasonInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"/>
                         </a>
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement season">
-                            <i onClick={this.handleSeasonInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i>
+                            <i onClick={this.handleSeasonInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"/>
                         </a>
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Increment episode">
-                            <i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"></i>
+                            <i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="increment" data-entry={i} className="fa fa-plus"/>
                         </a>
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Decrement episode">
-                            <i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"></i>
+                            <i onClick={this.handleEpisodeInteraction.bind(this)} data-mode="decrement" data-entry={i} className="fa fa-minus"/>
                         </a>
                         <a href="#userlistmanager" className="tooltipped iconContainer__icon" data-position="top" data-delay="50" data-tooltip="Remove entry">
-                            <i onClick={this.handleItemRemove.bind(this)} data-entry={i} className="fa fa-times"></i>
+                            <i onClick={this.handleItemRemove.bind(this)} data-entry={i} className="fa fa-times"/>
                         </a>
                     </td>
                 </tr>
             );
         });
 
-        this.setState({collection: currentCollection});
+        this.props.setShowItems(items);
     }
 
     handleItemRemove(e) {
         e.preventDefault();
 
-        let currentCollection = this.state.collection;
+        let items = this.props.getShowItems();
         let index = e.target.getAttribute("data-entry");
 
         this.entryData.splice(index, 1);
-        currentCollection.splice(index, 1);
+        items.splice(index, 1);
 
-        this.setState({collection: currentCollection});
+        this.props.setShowItems(items);
     }
 
     handleSeasonInteraction(e) {
