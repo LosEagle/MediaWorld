@@ -28,6 +28,9 @@ export default class UserListManager extends React.Component {
 
     componentWillUnmount() {
         this.clearTooltips();
+    }
+
+    componentWillUpdate() {
         this.saveChanges();
     }
 
