@@ -9,13 +9,14 @@
     "electron": "electron .",
     "pack": "electron-packager . mediaworld --all",
     "pack:win64": "electron-packager . mediaworld --platform=win32 --arch=x64",
+    "pack:linux64": "electron-packager . mediaworld --platform=linux --arch=x64",
     "eslint": "eslint assets/js/ || true"
   },
   "repository": "https://github.com/LosEagle/MediaWorld",
   "keywords": [
     "MediaWorld"
   ],
-  "author": "Miloslav Nosek",
+  "author": "LosEagle",
   "license": "MIT",
   "devDependencies": {
     "axios": "^0.16.2",
