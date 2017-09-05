@@ -11,6 +11,9 @@ export default class ManagerSearch extends React.Component {
         super();
 
         this.searchIsShown = false;
+
+        this.handleShortcuts = this.handleShortcuts.bind(this);
+        this.clearKeybinds = this.clearKeybinds.bind(this);
     }
 
     render() {
@@ -18,7 +21,7 @@ export default class ManagerSearch extends React.Component {
             <div className="managerSearch">
                 <input className="managerSearch__input" onInput={this.handleSearchInput.bind(this)} type="text" ref="search"/>
                 <a className="btn-floating btn-large waves-effect waves-light teal darken-1">
-                    <i className="managerSearch__icon fa fa-search" onClick={this.handleIconClick.bind(this)} ref="icon"/>
+                    <i className="managerSearch__icon fa fa-search" onClick={this.toggleSearch.bind(this)} ref="icon"/>
                 </a>
             </div>
         );
@@ -26,16 +29,25 @@ export default class ManagerSearch extends React.Component {
 
     componentDidMount() {
         this.data = io.read(global.userItems);
+        this.shortcutKeys = {
+            "Control": false,
+            "f": false,
+            "Escape": false
+        };
+        document.addEventListener("keydown", this.handleShortcuts);
+        document.addEventListener("keyup", this.clearKeybinds);
     }
 
-    handleIconClick() {
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleShortcuts);
+        document.removeEventListener("keyup", this.clearKeybinds);
+    }
+
+    toggleSearch() {
         if (this.searchIsShown === false) {
-            this.refs.search.style.display = "block";
-            this.searchIsShown = true;
-            this.refs.search.focus();
+            this.showSearch();
         } else {
-            this.refs.search.style.display = "none";
-            this.searchIsShown = false;
+            this.hideSearch();
         }
     }
 
@@ -53,5 +65,38 @@ export default class ManagerSearch extends React.Component {
         });
 
         this.props.setHiddenItems(indexes);
+    }
+
+    handleShortcuts(e) {
+        if (typeof this.shortcutKeys[e.key] === "undefined") return;
+
+        this.shortcutKeys[e.key] = true;
+
+        if (this.shortcutKeys["Control"] && this.shortcutKeys["f"])
+            this.toggleSearch();
+
+        else if (this.shortcutKeys["Escape"])
+            this.hideSearch();
+    }
+
+    clearKeybinds() {
+        for (let key in this.shortcutKeys) {
+            this.shortcutKeys[key] = false;
+        }
+    }
+
+    showSearch() {
+        if (!this.searchIsShown) {
+            this.refs.search.style.display = "block";
+            this.searchIsShown = true;
+            this.refs.search.focus();
+        }
+    }
+
+    hideSearch() {
+        if (this.searchIsShown) {
+            this.refs.search.style.display = "none";
+            this.searchIsShown = false;
+        }
     }
 }
