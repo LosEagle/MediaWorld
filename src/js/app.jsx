@@ -11,7 +11,6 @@ import IO from "./app/IO";
 
 import Home from "./components/Home/Home.jsx";
 import UserList from "./components/UserList/UserList.jsx";
-import UserListManager from "./components/UserListManager/UserListManager.jsx";
 import Calendar from "./components/Calendar/Calendar.jsx";
 import Sidebar from "./components/Sidebar/Sidebar.jsx";
 import Preloader from "./components/Preloader/Preloader.jsx";

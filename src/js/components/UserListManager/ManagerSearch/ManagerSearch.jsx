@@ -17,7 +17,9 @@ export default class ManagerSearch extends React.Component {
         return (
             <div className="managerSearch">
                 <input className="managerSearch__input" onInput={this.handleSearchInput.bind(this)} type="text" ref="search"/>
-                <i className="managerSearch__icon fa fa-search" onClick={this.handleIconClick.bind(this)} ref="icon"/>
+                <a className="btn-floating btn-large waves-effect waves-light teal darken-1">
+                    <i className="managerSearch__icon fa fa-search" onClick={this.handleIconClick.bind(this)} ref="icon"/>
+                </a>
             </div>
         );
     }
