@@ -18,10 +18,12 @@ import Detail from "./components/Detail/Detail.jsx";
 import ImportExport from "./components/ImportExport/ImportExport.jsx";
 import Settings from "./components/Settings/Settings.jsx";
 import ManagerHelper from "./components/UserListManager/ManagerContainer/ManagerContainer.jsx";
+import ResponsiveHeader from "./components/ResponsiveHeader/ResponsiveHeader.jsx";
 
 const app = document.getElementById("app");
 const sidebar = document.getElementById("sidebar");
 const progressbar = document.getElementById("progressbar");
+const responsiveHeader = document.getElementById("responsiveHeader");
 const io = new IO;
 
 export default class AppRouter extends React.Component {
@@ -50,3 +52,4 @@ export default class AppRouter extends React.Component {
 ReactDOM.render(<AppRouter />, app);
 ReactDOM.render(<Sidebar />, sidebar);
 ReactDOM.render(<Preloader visibility="hidden"/>, progressbar);
+ReactDOM.render(<ResponsiveHeader />, responsiveHeader);
