@@ -27,7 +27,7 @@ export default class Home extends React.Component {
     }
 
     render() {
-        if (!this.state.allowTemplRender) return (<div className="row home"></div>);
+        if (!this.state.allowTemplRender) return (<div className="row home"/>);
 
         if (this.state.renderData.length === 0) {
             return (
@@ -52,6 +52,15 @@ export default class Home extends React.Component {
                 this.entryData[i].id = response[i].data.id;
             }
         }).then(() => {
+            if (this.entryData.length === 0) {
+                this.setState({
+                    renderData: finalData,
+                    allowTemplRender: true
+                });
+
+                return;
+            }
+
             for (let i = 0; i <= this.entryData.length - 1; i++) {
                 tvm.getEpisode(this.entryData[i].id, this.entryData[i].season, this.entryData[i].episode).then((response) => {
                     const currentItem = response.data;
@@ -76,19 +85,23 @@ export default class Home extends React.Component {
         if (!item.id) return;
 
         return (
-            <div className="col s4" key={i}>
+            <div className="col s4" key={ i }>
                 <div className="card small">
                     <div className="card-image">
-                        <img className="activator" src={item.image === null ? "https://placehold.it/350x150?text=no+image" : item.image.medium} alt=""/>
-                        <span className=""></span>
+                        <img
+                            className="activator"
+                            src={ item.image === null ? "https://placehold.it/350x150?text=no+image" : item.image.medium }
+                            alt=""/>
+                        <span className=""/>
                     </div>
                     <div className="card-content">
-                        <a href={detailUrl}><strong>{showName} | {item.name} | S{item.season}E{item.number} | {settings.formatDate(item.airstamp)}</strong></a>
-                        <p className="truncate">{h.stripParagraphs(item.summary)}</p>
+                        <a href={ detailUrl }><strong>{ showName } | { item.name } | S{ item.season }E{ item.number }
+                            | { settings.formatDate(item.airstamp) }</strong></a>
+                        <p className="truncate">{ h.stripParagraphs(item.summary) }</p>
                     </div>
                     <div className="card-reveal">
-                        <span className="card-title">{item.name}<i className="fa fa-times right"></i></span>
-                        <p>{h.stripParagraphs(item.summary)}</p>
+                        <span className="card-title">{ item.name }<i className="fa fa-times right"/></span>
+                        <p>{ h.stripParagraphs(item.summary) }</p>
                     </div>
                 </div>
             </div>
@@ -100,7 +113,7 @@ export default class Home extends React.Component {
             <div>
                 <div>
                     <strong>
-                        <i className="fa fa-exclamation-circle"></i> Your watchlist is empty.
+                        <i className="fa fa-exclamation-circle"/> Your watchlist is empty.
                     </strong>
                 </div>
                 <div className="section">
