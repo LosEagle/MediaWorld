@@ -6,6 +6,12 @@ import moment from "moment-timezone";
 const io = new IO;
 
 export default class Settings extends React.Component {
+    constructor() {
+        super();
+
+        this.fields = {};
+    }
+
     componentDidMount() {
         this.setFormInitialValues();
         $("select").material_select();
@@ -19,7 +25,7 @@ export default class Settings extends React.Component {
                         <h1>Date</h1>
                         <h2>Format</h2>
                         <div className="input-field">
-                            <select ref="dateFormat">
+                            <select ref={ (dateFormat) => { this.fields.dateFormat = dateFormat; } }>
                                 <option>DD.MM.YYYY hh:mm</option>
                                 <option>MM.DD.YYYY hh:mm</option>
                                 <option>YYYY.MM.DD hh:mm</option>
@@ -35,7 +41,7 @@ export default class Settings extends React.Component {
                         <h2>Timezone</h2>
 
                         <div className="input-field">
-                            <select ref="timezone">
+                            <select ref={(timezone) => { this.fields.timezone = timezone; }}>
                                 {moment.tz.names().map(this.fillTimezoneOptions)}
                             </select>
                         </div>
@@ -45,7 +51,7 @@ export default class Settings extends React.Component {
                         <h2>First day of week</h2>
                         <span>0 = SU, 1 = MO, 2 = TU etc.</span>
                         <div className="input-field">
-                            <select ref="calendarFirstDay">
+                            <select ref={ (calendarFirstDay) => { this.fields.calendarFirstDay = calendarFirstDay; } }>
                                 <option>0</option>
                                 <option>1</option>
                                 <option>2</option>
@@ -76,8 +82,8 @@ export default class Settings extends React.Component {
         e.preventDefault();
         let list = io.read(global.settings);
 
-        for (let item in this.refs) {
-            let refVal = this.refs[item].value;
+        for (let item in this.fields) {
+            let refVal = this.fields[item].value;
 
             if ((!list[item] || list[item] !== refVal) && refVal !== "") {
                 list[item] = refVal;
@@ -91,8 +97,8 @@ export default class Settings extends React.Component {
     setFormInitialValues() {
         const contents = io.read(global.settings);
 
-        this.refs.dateFormat.value = contents.dateFormat;
-        this.refs.timezone.value = contents.timezone;
-        this.refs.calendarFirstDay.value = contents.calendarFirstDay;
+        this.fields.dateFormat.value = contents.dateFormat;
+        this.fields.timezone.value = contents.timezone;
+        this.fields.calendarFirstDay.value = contents.calendarFirstDay;
     }
 }

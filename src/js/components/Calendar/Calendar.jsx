@@ -24,12 +24,12 @@ export default class Calendar extends React.Component {
 
     render() {
         return (
-            <div id="calendar" className="calendar" ref="calendar"></div>
+            <div id="calendar" className="calendar" ref={ (calendar) => { this.calendar = calendar; } } />
         );
     }
 
     initFullCalendar() {
-        $("#calendar").fullCalendar({
+        $(this.calendar).fullCalendar({
             header: {
                 left: "prev, next today",
                 center: "title",

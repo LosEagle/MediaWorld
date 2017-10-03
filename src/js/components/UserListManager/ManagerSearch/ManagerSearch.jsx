@@ -19,9 +19,9 @@ export default class ManagerSearch extends React.Component {
     render() {
         return (
             <div className="managerSearch">
-                <input className="managerSearch__input" onInput={this.handleSearchInput.bind(this)} type="text" ref="search"/>
+                <input className="managerSearch__input" onInput={this.handleSearchInput.bind(this)} type="text" ref={ (search) => { this.search = search; } }/>
                 <a className="btn-floating btn-large waves-effect waves-light teal darken-1">
-                    <i className="managerSearch__icon fa fa-search" onClick={this.toggleSearch.bind(this)} ref="icon"/>
+                    <i className="managerSearch__icon fa fa-search" onClick={this.toggleSearch.bind(this)} ref={ (icon) => { this.icon = icon; } }/>
                 </a>
             </div>
         );
@@ -53,7 +53,7 @@ export default class ManagerSearch extends React.Component {
 
     handleSearchInput() {
         let data = this.data;
-        const val = this.refs.search.value;
+        const val = this.search.value;
         let indexes = [];
 
         _.forEach(data, (value, key) => {
@@ -87,15 +87,15 @@ export default class ManagerSearch extends React.Component {
 
     showSearch() {
         if (!this.searchIsShown) {
-            this.refs.search.style.display = "block";
+            this.search.style.display = "block";
             this.searchIsShown = true;
-            this.refs.search.focus();
+            this.search.focus();
         }
     }
 
     hideSearch() {
         if (this.searchIsShown) {
-            this.refs.search.style.display = "none";
+            this.search.style.display = "none";
             this.searchIsShown = false;
         }
     }

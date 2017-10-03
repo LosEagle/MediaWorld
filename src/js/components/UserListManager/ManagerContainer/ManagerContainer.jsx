@@ -10,7 +10,7 @@ export default class ManagerContainer extends React.Component {
                     setShowItems={this.setShowItems.bind(this)}
                     getShowItems={this.getShowItems.bind(this)}
                     getHiddenItems={this.getHiddenItems.bind(this)}
-                    ref="managerView"/>
+                    ref={ (managerView) => { this.managerView = managerView; } }/>
                 <ManagerSearch
                     setShowItems={this.setShowItems.bind(this)}
                     getShowItems={this.getShowItems.bind(this)}
@@ -38,7 +38,7 @@ export default class ManagerContainer extends React.Component {
 
     setHiddenItems(rowIndexes) {
         this.setState({ hiddenItems: rowIndexes }, () => {
-            this.refs.managerView.prepareTemplate();
+            this.managerView.prepareTemplate();
         });
     }
 

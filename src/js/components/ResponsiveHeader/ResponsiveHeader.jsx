@@ -3,12 +3,18 @@ import "./responsiveHeader.sass";
 
 export default class ResponsiveHeader extends React.Component {
     componentDidMount() {
-        $(".button-collapse").sideNav();
+        $(this.btnCollapse).sideNav();
     }
 
     render() {
         return (
-            <a href="#" data-activates="slide-out" className="button-collapse"><i className="fa fa-bars" /></a>
+            <a
+                href="#"
+                data-activates="slide-out"
+                className="button-collapse"
+                ref={ (btnCollapse) => {
+                    this.btnCollapse = btnCollapse;
+                } }><i className="fa fa-bars"/></a>
         );
     }
 }

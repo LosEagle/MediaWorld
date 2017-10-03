@@ -15,16 +15,16 @@ export default class UserList extends React.Component {
                 <form onSubmit={this.handleFormSubmit.bind(this)} className="col s12">
                     <div className="row">
                         <div className="input-field col s12">
-                            <input id="name" type="text" className="validate" ref="name"/>
-                            <label ref="nameLabel" htmlFor="name">Show name</label>
+                            <input id="name" type="text" className="validate" ref={ (name) => { this.name = name; } }/>
+                            <label ref={ (nameLabel) => { this.nameLabel = nameLabel; } } htmlFor="name">Show name</label>
                         </div>
                         <div className="input-field col s12">
-                            <input id="season" type="number" className="validate" ref="season"/>
-                            <label ref="seasonLabel" htmlFor="season">Season</label>
+                            <input id="season" type="number" className="validate" ref={ (season) => { this.season = season; } }/>
+                            <label ref={ (seasonLabel) => { this.seasonLabel = seasonLabel; } } htmlFor="season">Season</label>
                         </div>
                         <div className="input-field col s12">
-                            <input id="episode" type="number" className="validate" ref="episode"/>
-                            <label ref="episodeLabel" htmlFor="episode">Episode</label>
+                            <input id="episode" type="number" className="validate" ref={ (episode) => { this.episode = episode; } }/>
+                            <label ref={ (episodeLabel) => { this.episodeLabel = episodeLabel; } } htmlFor="episode">Episode</label>
                         </div>
                         <div className="col s12">
                             <button className="btn waves-effect waves-light" type="submit" name="action">
@@ -38,9 +38,9 @@ export default class UserList extends React.Component {
     }
 
     handleFormSubmit(event) {
-        const name = this.refs.name.value;
-        const season = this.refs.season.value;
-        const episode = this.refs.episode.value;
+        const name = this.name.value;
+        const season = this.season.value;
+        const episode = this.episode.value;
 
         event.preventDefault();
 
@@ -61,12 +61,12 @@ export default class UserList extends React.Component {
     }
 
     clearForm() {
-        const name = this.refs.name;
-        const season = this.refs.season;
-        const episode = this.refs.episode;
-        const nameL = this.refs.nameLabel;
-        const seasonL = this.refs.seasonLabel;
-        const episodeL = this.refs.episodeLabel;
+        const name = this.name;
+        const season = this.season;
+        const episode = this.episode;
+        const nameL = this.nameLabel;
+        const seasonL = this.seasonLabel;
+        const episodeL = this.episodeLabel;
 
         name.value = "";
         season.value = "";
