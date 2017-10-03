@@ -1,4 +1,5 @@
 import React from "react";
+import "./sidebar.sass";
 
 export default class Sidebar extends React.Component {
     constructor() {
