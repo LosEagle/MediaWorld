@@ -1,9 +1,9 @@
 import React from "react";
 import "./userListManager.sass";
-import * as global from "../../app/global";
-import IO from "../../app/IO";
-import TVMazeAPI from "../../app/TVMazeAPI";
-import Settings from "../../app/Settings";
+import * as global from "../../../app/global";
+import IO from "../../../app/IO";
+import TVMazeAPI from "../../../app/TVMazeAPI";
+import Settings from "../../../app/Settings";
 
 const io = new IO;
 const tvm = new TVMazeAPI;
@@ -35,8 +35,10 @@ export default class UserListManager extends React.Component {
     }
 
     render() {
-        if ($(".tooltippped").length > 0)
-            $(".tooltipped").tooltip();
+        const tooltipped = $(".tooltipped");
+
+        if (tooltipped.length > 0)
+            tooltipped.tooltip();
 
         return (
             <div className="row userListManager">

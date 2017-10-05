@@ -17,7 +17,7 @@ import Preloader from "./components/Preloader/Preloader.jsx";
 import Detail from "./components/Detail/Detail.jsx";
 import ImportExport from "./components/ImportExport/ImportExport.jsx";
 import Settings from "./components/Settings/Settings.jsx";
-import ManagerHelper from "./components/UserListManager/ManagerContainer/ManagerContainer.jsx";
+import ManagerHelper from "./components/UserListManager/ManagerContainer.jsx";
 import ResponsiveHeader from "./components/ResponsiveHeader/ResponsiveHeader.jsx";
 
 const app = document.getElementById("app");

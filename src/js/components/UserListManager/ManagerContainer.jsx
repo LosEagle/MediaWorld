@@ -1,6 +1,6 @@
 import React from "react";
-import ManagerSearch from "../ManagerSearch/ManagerSearch.jsx";
-import UserListManager from "../UserListManager.jsx";
+import ManagerSearch from "./ManagerSearch/ManagerSearch.jsx";
+import UserListManager from "./ManagerTable/UserListManager.jsx";
 
 export default class ManagerContainer extends React.Component {
     render() {
