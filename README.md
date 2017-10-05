@@ -26,4 +26,4 @@ Alternatively, you can use electron-packager CLI using local binary. Example of 
     ./node_modules/.bin/electron-packager . mediaworld --platform=linux --arch=x64
 
 # Privacy
-MediaWorld doesn't collect any kind of data at all as you can see in the code but third parties might. We use TVMaze that provides API for getting all relevant information about shows and YouTube for trailers.
+MediaWorld doesn't collect any kind of data at all as you can see in the code but third parties might. We use TVMaze that provides API for getting all relevant information about shows.
