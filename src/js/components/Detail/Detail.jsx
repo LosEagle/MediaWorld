@@ -27,7 +27,7 @@ export default class Detail extends React.Component {
                         <p>Season {this.state.episodeInfo.season} Episode {this.state.episodeInfo.number}</p>
                         <p>Release: {settings.formatDate(this.state.episodeInfo.airstamp)}</p>
                         <p>Length: {this.state.episodeInfo.runtime}</p>
-                        {this.state.episodeInfo.summary}
+                        <p dangerouslySetInnerHTML={{__html: this.state.episodeInfo.summary}} />
                     </div>
                 </div>
             </div>

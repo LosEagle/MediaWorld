@@ -85,7 +85,7 @@ export default class Home extends React.Component {
         if (!item.id) return;
 
         return (
-            <div className="col s4" key={ i }>
+            <div className="col s4 l3 xl2" key={ i }>
                 <div className="card small">
                     <div className="card-image">
                         <img
@@ -95,8 +95,9 @@ export default class Home extends React.Component {
                         <span className=""/>
                     </div>
                     <div className="card-content">
-                        <a href={ detailUrl }><strong>{ showName } | { item.name } | S{ item.season }E{ item.number }
-                            | { settings.formatDate(item.airstamp) }</strong></a>
+                        <a href={ detailUrl }>
+                            <strong>{ showName } | { item.name } | S{ item.season }E{ item.number + " " }
+                             | { settings.formatDate(item.airstamp) }</strong></a>
                         <p className="truncate">{ h.stripParagraphs(item.summary) }</p>
                     </div>
                     <div className="card-reveal">
