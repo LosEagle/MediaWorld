@@ -7,5 +7,23 @@
                 bottom: 10px
 
     .detailContent
-        iframe
-            width: 100%
+        .epImg
+            max-height: 50vh
+            overflow: hidden
+            z-index: 0
+
+            .epImg__img
+                width: 100%
+                height: auto
+
+            .epImg__img[src=""]
+                display: none
+
+        .epContent
+            color: #FFF
+            padding: 10px
+            margin-top: 10px
+            z-index: 1
+            display: inline-block
+            background-color: #37474F
+            min-width: 100%

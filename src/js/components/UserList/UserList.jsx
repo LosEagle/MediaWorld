@@ -1,11 +1,10 @@
 import React from "react";
-import * as _ from "lodash";
 import * as global from "../../app/global";
 import IO from "../../app/IO";
 
 const io = new IO;
 
-class UserList extends React.Component {
+export default class UserList extends React.Component {
     constructor() {
         super();
     }
@@ -13,19 +12,19 @@ class UserList extends React.Component {
     render() {
         return (
             <div className="row">
-                <form onSubmit={this.handleUserListForm.bind(this)} className="col s12">
+                <form onSubmit={this.handleFormSubmit.bind(this)} className="col s12">
                     <div className="row">
                         <div className="input-field col s12">
-                            <input id="name" type="text" className="validate" ref="name"/>
-                            <label htmlFor="name">Show name</label>
+                            <input id="name" type="text" className="validate" ref={ (name) => { this.name = name; } }/>
+                            <label ref={ (nameLabel) => { this.nameLabel = nameLabel; } } htmlFor="name">Show name</label>
                         </div>
                         <div className="input-field col s12">
-                            <input id="season" type="number" className="validate" ref="season"/>
-                            <label htmlFor="season">Season</label>
+                            <input id="season" type="number" className="validate" ref={ (season) => { this.season = season; } }/>
+                            <label ref={ (seasonLabel) => { this.seasonLabel = seasonLabel; } } htmlFor="season">Season</label>
                         </div>
                         <div className="input-field col s12">
-                            <input id="episode" type="number" className="validate" ref="episode"/>
-                            <label htmlFor="episode">Episode</label>
+                            <input id="episode" type="number" className="validate" ref={ (episode) => { this.episode = episode; } }/>
+                            <label ref={ (episodeLabel) => { this.episodeLabel = episodeLabel; } } htmlFor="episode">Episode</label>
                         </div>
                         <div className="col s12">
                             <button className="btn waves-effect waves-light" type="submit" name="action">
@@ -38,10 +37,10 @@ class UserList extends React.Component {
         );
     }
 
-    handleUserListForm(event) {
-        let name = this.refs.name.value;
-        let season = this.refs.season.value;
-        let episode = this.refs.episode.value;
+    handleFormSubmit(event) {
+        const name = this.name.value;
+        const season = this.season.value;
+        const episode = this.episode.value;
 
         event.preventDefault();
 
@@ -50,15 +49,35 @@ class UserList extends React.Component {
             return;
         }
 
-        let finalJson = [{
+        const finalJson = [{
             "name": name,
             "season": season,
             "episode": episode
         }];
 
-        io.createFileIfNotExists(global.userItems);
         io.append(global.userItems, finalJson);
+        this.clearForm();
+        Materialize.toast("Show added successfully.", 5000);
+    }
+
+    clearForm() {
+        const name = this.name;
+        const season = this.season;
+        const episode = this.episode;
+        const nameL = this.nameLabel;
+        const seasonL = this.seasonLabel;
+        const episodeL = this.episodeLabel;
+
+        name.value = "";
+        season.value = "";
+        episode.value = "";
+
+        name.classList.remove("valid");
+        season.classList.remove("valid");
+        episode.classList.remove("valid");
+
+        nameL.classList.remove("active");
+        seasonL.classList.remove("active");
+        episodeL.classList.remove("active");
     }
 }
-
-module.exports = UserList;

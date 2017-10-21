@@ -4,65 +4,80 @@ import "fullcalendar/dist/fullcalendar.css";
 import "./calendar.sass";
 import * as global from "../../app/global";
 import IO from "../../app/IO";
-import ShowAPI from "../../app/ShowAPI";
+import TVMazeAPI from "../../app/TVMazeAPI";
+import * as _ from "lodash";
+import Settings from "../../app/Settings";
 
 const io = new IO;
-const show = new ShowAPI;
+const tvm = new TVMazeAPI;
+const settings = new Settings;
 
-class Calendar extends React.Component {
+export default class Calendar extends React.Component {
     constructor() {
         super();
+        this.calendarEvents = [];
     }
 
     componentDidMount() {
-        this.initFullCalendar();
         this.getShows();
     }
 
     render() {
         return (
-            <div id="calendar" className="calendar" ref="calendar"></div>
+            <div id="calendar" className="calendar" ref={ (calendar) => { this.calendar = calendar; } } />
         );
     }
 
     initFullCalendar() {
-        $("#calendar").fullCalendar({
+        $(this.calendar).fullCalendar({
             header: {
                 left: "prev, next today",
                 center: "title",
                 right: "listMonth, month, basicWeek, basicDay"
             },
-            firstDay: 1
+            firstDay: settings.getCalendarFirstDay(),
+            events: this.calendarEvents
         });
     }
 
     getShows() {
         let currentJSON = io.read(global.userItems);
+        let i = 0;
 
         for (let item of currentJSON) {
-            let name = item.name;
+            const name = item.name;
+            const season = Number(item.season);
+            let id = 0;
 
-            show.getSeason(item.name, item.season).then((response) => {
-                const data = response.data.Episodes;
+            tvm.getSingleShowByName(name).then((response) => {
+                id = response.data.id;
+            }).then(() => {
+                tvm.getEpisodesByID(id).then((response) => {
+                    if (id) {
+                        const data = response.data;
+                        const episodes = _.filter(data, { "season": season });
 
-                if (!data) return;
+                        for (let ep of episodes) {
+                            const eventObj = {
+                                title: `${name} - S${ep.season}E${ep.number}`,
+                                start: new Date(ep.airstamp),
+                                end: new Date(ep.airstamp),
+                                editable: false,
+                                allDay: false
+                            };
 
-                for (let i = 0; i <= data.length - 1; i++) {
-                    let ep = data[i];
+                            this.calendarEvents.push(eventObj);
+                        }
+                    }
+                }).then(() => {
+                    if (i === currentJSON.length -1)
+                        this.initFullCalendar();
 
-                    const eventObj = {
-                        title: `${item.name} - S${item.season}E${ep.Episode}`,
-                        start: new Date(ep.Released),
-                        end: new Date(ep.Released),
-                        editable: false,
-                        allDay: true
-                    };
-
-                    $("#calendar").fullCalendar("renderEvent", eventObj, true);
-                }
+                    i++;
+                });
+            }).catch((err) => {
+                return;
             });
         }
     }
 }
-
-module.exports = Calendar;

@@ -1,5 +1,9 @@
+.vscode
+.idea
+
 node_modules
+
 build/*
-.vscode/*
 npm-debug\.log
 src/data/list.json
+src/data/settings.json

@@ -1,12 +1,16 @@
 import React from "react";
 import * as global from "../../app/global";
 import IO from "../../app/IO";
-import ShowAPI from "../../app/ShowAPI";
+import TVMazeAPI from "../../app/TVMazeAPI";
+import Helper from "../../app/Helper";
+import Settings from "../../app/Settings";
 
 const io = new IO;
-const show = new ShowAPI;
+const tvm = new TVMazeAPI;
+const h = new Helper;
+const settings = new Settings;
 
-class Home extends React.Component {
+export default class Home extends React.Component {
     constructor() {
         super();
 
@@ -17,17 +21,13 @@ class Home extends React.Component {
         };
     }
 
-    componentWillMount() {
-        io.createFileIfNotExists(global.userItems);
-    }
-
     componentDidMount() {
         this.entryData = io.read(global.userItems);
-        this.fetchEpisodeData();
+        this.getEpisodeData();
     }
 
     render() {
-        if (!this.state.allowTemplRender) return (<div className="row home"></div>);
+        if (!this.state.allowTemplRender) return (<div className="row home"/>);
 
         if (this.state.renderData.length === 0) {
             return (
@@ -44,51 +44,69 @@ class Home extends React.Component {
         }
     }
 
-    fetchEpisodeData() {
+    getEpisodeData() {
         let finalData = [];
 
-        show.getMultipleEpisodes(this.entryData).then((result) => {
-            result.forEach((key, index) => {
-                const currentItem = result[index].data;
+        tvm.searchForShows(this.entryData).then((response) => {
+            for (let i = 0; i <= response.length - 1; i++) {
+                this.entryData[i].id = response[i].data.id;
+            }
+        }).then(() => {
+            if (this.entryData.length === 0) {
+                this.setState({
+                    renderData: finalData,
+                    allowTemplRender: true
+                });
 
-                if (typeof finalData !== "undefined")
+                return;
+            }
+
+            for (let i = 0; i <= this.entryData.length - 1; i++) {
+                tvm.getEpisode(this.entryData[i].id, this.entryData[i].season, this.entryData[i].episode).then((response) => {
+                    const currentItem = response.data;
+
+                    currentItem.showName = this.entryData[i].name;
                     finalData = _.concat(finalData, currentItem);
-                else {
-                    finalData.push(currentItem);
-                }
-            });
 
-            this.setState({
-                renderData: finalData,
-                allowTemplRender: true
-            });
+                }).then(() => {
+                    this.setState({
+                        renderData: finalData,
+                        allowTemplRender: true
+                    });
+                });
+            }
         });
     }
 
     showTemplCards(item, i) {
-        if (item.Plot) {
-            const showName = this.entryData[i].name;
-            const detailUrl = `#detail/${item.imdbID}/${showName}`;
+        const showName = item.showName;
+        const detailUrl = `#detail/${item.id}/${showName}`;
 
-            return (
-                <div className="col s4" key={i}>
-                    <div className="card small">
-                        <div className="card-image">
-                            <img className="activator" src={item.Poster === "N/A" ? "" : item.Poster} alt=""/>
-                            <span className=""></span>
-                        </div>
-                        <div className="card-content">
-                            <a href={detailUrl}><strong>{showName} | {item.Title} | S{item.Season}E{item.Episode} | {item.Released}</strong></a>
-                            <p>{item.Plot.substring(0,40)}</p>
-                        </div>
-                        <div className="card-reveal">
-                            <span className="card-title">{item.Title}<i className="fa fa-times right"></i></span>
-                            <p>{item.Plot}</p>
-                        </div>
+        if (!item.id) return;
+
+        return (
+            <div className="col s4 l3 xl2" key={ i }>
+                <div className="card small">
+                    <div className="card-image">
+                        <img
+                            className="activator"
+                            src={ item.image === null ? "https://placehold.it/350x150?text=no+image" : item.image.medium }
+                            alt=""/>
+                        <span className=""/>
+                    </div>
+                    <div className="card-content">
+                        <a href={ detailUrl }>
+                            <strong>{ showName } | { item.name } | S{ item.season }E{ item.number + " " }
+                             | { settings.formatDate(item.airstamp) }</strong></a>
+                        <p className="truncate">{ h.stripParagraphs(item.summary) }</p>
+                    </div>
+                    <div className="card-reveal">
+                        <span className="card-title">{ item.name }<i className="fa fa-times right"/></span>
+                        <p>{ h.stripParagraphs(item.summary) }</p>
                     </div>
                 </div>
-            );
-        }
+            </div>
+        );
     }
 
     showTemplEmptyWatchlist() {
@@ -96,7 +114,7 @@ class Home extends React.Component {
             <div>
                 <div>
                     <strong>
-                        <i className="fa fa-exclamation-circle"></i> Your watchlist is empty.
+                        <i className="fa fa-exclamation-circle"/> Your watchlist is empty.
                     </strong>
                 </div>
                 <div className="section">
@@ -106,5 +124,3 @@ class Home extends React.Component {
         );
     }
 }
-
-module.exports = Home;

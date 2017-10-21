@@ -5,7 +5,7 @@ import * as axios from "axios";
 
 const progressbar = document.getElementById("progressbar");
 
-class Preloader extends React.Component {
+export default class Preloader extends React.Component {
     constructor() {
         super();
     }
@@ -38,5 +38,3 @@ class Preloader extends React.Component {
         ReactDOM.render(<Preloader visibility="hidden" />, progressbar);
     }
 }
-
-module.exports = Preloader;

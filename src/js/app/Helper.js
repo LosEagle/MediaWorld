@@ -7,4 +7,9 @@ export default class Helper {
         else
             throw "err @ Helper | detectEnvironment";
     }
+
+    stripParagraphs(string) {
+        if (!string) return;
+        return string.replace(/<p>/g, "").replace(/<\/p>/g, "");
+    }
 }

@@ -5,7 +5,9 @@ export default class IO {
     createFileIfNotExists(path) {
         if (!fs.existsSync(path)) {
             fs.openSync(path, "w");
+            return true;
         }
+        return false;
     }
 
     read(path) {
@@ -49,7 +51,7 @@ export default class IO {
     }
 
     changeEntry(path, entryIndex, entry) {
-        let currentJSON = this.read(path, entryIndex);
+        let currentJSON = this.read(path);
         entryIndex = parseInt(entryIndex);
 
         currentJSON[entryIndex] = entry;
@@ -61,10 +63,17 @@ export default class IO {
         });
     }
 
-    write(path, output) {
-        output = JSON.stringify(output, null, 4);
+    write(path, object) {
+        object = JSON.stringify(object, null, 4);
 
-        fs.writeFile(path, output, (err) => {
+        fs.writeFile(path, object, (err) => {
+            if (err)
+                throw err;
+        });
+    }
+
+    writeStrSync(path, string) {
+        fs.writeFile(path, string, (err) => {
             if (err)
                 throw err;
         });
