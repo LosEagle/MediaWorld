@@ -11,7 +11,7 @@ module.exports = {
     },
 
     module: {
-        loaders: [
+        rules: [
             {
                 enforce: "pre",
                 test: /(\.js$|\.jsx$)/,

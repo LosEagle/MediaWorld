@@ -4,8 +4,8 @@
   "description": "MediaWorld",
   "main": "main.js",
   "scripts": {
-    "webpack": "webpack --config webpack.config.development.js --watch",
-    "webpack:bundle": "webpack",
+    "webpack": "webpack --config webpack.config.development.js --watch --mode development",
+    "webpack:bundle": "webpack --optimize-minimize --mode production",
     "electron": "electron .",
     "pack": "electron-packager . mediaworld --all",
     "pack:win64": "npm run webpack:bundle && electron-packager . mediaworld --platform=win32 --arch=x64",
