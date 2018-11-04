@@ -85,7 +85,7 @@ export default class Home extends React.Component {
         if (!item.id) return;
 
         return (
-            <div className="col s4 l3 xl2" key={ i }>
+            <div className="col s6 m4 l3" key={ i }>
                 <div className="card small">
                     <div className="card-image">
                         <img

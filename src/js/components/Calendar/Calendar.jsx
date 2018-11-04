@@ -41,43 +41,44 @@ export default class Calendar extends React.Component {
     }
 
     getShows() {
-        let currentJSON = io.read(global.userItems);
-        let i = 0;
+        let shows = io.read(global.userItems);
 
-        for (let item of currentJSON) {
-            const name = item.name;
-            const season = Number(item.season);
+        for (let i = 0; i < shows.length; i++) {
+            const show = shows[i];
+            const name = show.name;
+            const season = Number(show.season);
             let id = 0;
-
-            tvm.getSingleShowByName(name).then((response) => {
+            const getEpisodesByShowID = (response) => {
                 id = response.data.id;
-            }).then(() => {
-                tvm.getEpisodesByID(id).then((response) => {
-                    if (id) {
-                        const data = response.data;
-                        const episodes = _.filter(data, { "season": season });
 
-                        for (let ep of episodes) {
-                            const eventObj = {
-                                title: `${name} - S${ep.season}E${ep.number}`,
-                                start: new Date(ep.airstamp),
-                                end: new Date(ep.airstamp),
-                                editable: false,
-                                allDay: false
-                            };
+                return tvm.getEpisodesByID(id);
+            };
+            const getEpisodeDates = (response) => {
+                if (!id) return;
 
-                            this.calendarEvents.push(eventObj);
-                        }
-                    }
-                }).then(() => {
-                    if (i === currentJSON.length -1)
-                        this.initFullCalendar();
+                const data = response.data;
+                const episodes = _.filter(data, { "season": season });
+                for (let ep of episodes) {
+                    const eventObj = {
+                        title: `${name} - S${ep.season}E${ep.number}`,
+                        start: new Date(ep.airstamp),
+                        end: new Date(ep.airstamp),
+                        editable: false,
+                        allDay: false
+                    };
 
-                    i++;
+                    this.calendarEvents.push(eventObj);
+                }
+
+                if (i === shows.length -1) this.initFullCalendar();
+            };
+
+            tvm.getSingleShowByName(name)
+                .then(getEpisodesByShowID)
+                .then(getEpisodeDates)
+                .catch(err => {
+                    return err;
                 });
-            }).catch((err) => {
-                return;
-            });
         }
     }
 }

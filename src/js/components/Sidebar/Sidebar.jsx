@@ -2,10 +2,6 @@ import React from "react";
 import "./sidebar.sass";
 
 export default class Sidebar extends React.Component {
-    constructor() {
-        super();
-    }
-
     render() {
         return (
             <ul id="slide-out" className="side-nav fixed">
